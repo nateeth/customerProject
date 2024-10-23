@@ -30,7 +30,7 @@ function App() {
         },
         {
           path: '/topics',
-          element: <TopicsPage />,
+          element: <TopicsPage user={user} />,
         },
         {
           path: '/topic/:cards',
