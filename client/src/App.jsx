@@ -22,11 +22,11 @@ function App() {
         },
         {
           path: '/signup',
-          element: <SignupPage />,
+          element: <SignupPage setUser={setUser} />,
         },
         {
           path: '/login',
-          element: <LoginPage />,
+          element: <LoginPage setUser={setUser} />,
         },
         {
           path: '/topics',

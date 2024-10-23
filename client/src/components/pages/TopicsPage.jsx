@@ -1,7 +1,9 @@
-import React from 'react'
+import React from 'react';
 
 export default function TopicsPage() {
   return (
-    <div>TopicsPage</div>
-  )
+    <div>
+      <h1>Темы</h1>
+    </div>
+  );
 }

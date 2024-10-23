@@ -2,6 +2,6 @@ import React from 'react'
 
 export default function TopicComponent() {
   return (
-    <div>TopicComponent</div>
+    <div>Выводит одну тему в списке тем</div>
   )
 }
