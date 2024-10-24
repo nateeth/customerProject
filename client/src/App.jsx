@@ -5,7 +5,7 @@ import HomePage from './components/pages/HomePage';
 import SignupPage from './components/pages/SignupPage';
 import LoginPage from './components/pages/LoginPage';
 import TopicsPage from './components/pages/TopicsPage';
-import CardPage from './components/pages/CardsPage';
+import CardsPage from './components/pages/CardsPage';
 import AccountPage from './components/pages/AccountPage';
 import ErrorPage from './components/pages/ErrorPage';
 
@@ -33,8 +33,8 @@ function App() {
           element: <TopicsPage user={user} />,
         },
         {
-          path: '/topic/:cards',
-          element: <CardPage />,
+          path: '/topics/:topicId',
+          element: <CardsPage />,
         },
         {
           path: '/account',

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 export default function TopicsPage({ user }) {
   const [topics, setTopics] = useState([]);
   useEffect(() => {
-    axios('/api/topics').then(({ data }) => setTopics(data));
+    axios.get('/api/topics/').then(({ data }) => setTopics(data));
   }, []);
 
   return (
@@ -14,7 +14,7 @@ export default function TopicsPage({ user }) {
       <ul>
         {topics?.map((topic) => (
           <li key={topic.id}>
-            <Link to={`/topic/${topic.id}`}>{topic.name}</Link>
+            <Link to={`/topics/${topic.id}`}>{topic.name}</Link>
           </li>
         ))}
       </ul>
