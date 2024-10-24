@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { TextField, Button, Box, Typography, Container } from '@mui/material';
+import axiosInstance from '../../axiosInstance'
+import {setAccessToken} from '../../axiosInstance'
 
 export default function LoginPage({ setUser }) {
   const [formData, setFormData] = useState({
@@ -18,8 +19,9 @@ export default function LoginPage({ setUser }) {
   const loginHandler = async (event) => {
     event.preventDefault();
     try {
-      const res = await axios.post('/api/auth/login', formData);
+      const res = await axiosInstance.post('/api/auth/login', formData);
       setUser(res.data.user);
+      setAccessToken(res.data.accessToken);
     } catch (error) {
       if (error.response) {
         console.error('Ошибка ответа сервера:', error.response.data);

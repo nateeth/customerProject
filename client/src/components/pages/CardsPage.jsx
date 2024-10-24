@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Box, Typography, Button } from '@mui/material';
 import { motion } from 'framer-motion';
+import axiosInstance from '../../axiosInstance'
+
 
 const cardData = [
   { id: 1, word: 'Apple', translation: 'Яблоко' },

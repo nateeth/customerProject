@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Layout from './components/Layout';
 import HomePage from './components/pages/HomePage';
@@ -8,14 +8,31 @@ import TopicsPage from './components/pages/TopicsPage';
 import CardsPage from './components/pages/CardsPage';
 import AccountPage from './components/pages/AccountPage';
 import ErrorPage from './components/pages/ErrorPage';
-import AuthPage from './components/pages/AuthPage';
+import axiosInstance from './axiosInstance';
+import { setAccessToken } from './axiosInstance';
 
 function App() {
   const [user, setUser] = useState(0);
+
+  const logoutHandler = async () => {
+    await axiosInstance.get('/auth/logout');
+    setUser(null);
+    setAccessToken('');
+  };
+
+  useEffect(() => {
+    axiosInstance('/api/tokens/refresh')
+      .then((res) => {
+        setUser(res.data.user);
+        setAccessToken(res.data.accessToken);
+      })
+      .catch(() => setUser(null));
+  }, []);
+
   const router = createBrowserRouter([
     {
       path: '/',
-      element: <Layout user={user} />,
+      element: <Layout user={user} logoutHandler={logoutHandler} />,
       children: [
         {
           path: '/',
@@ -31,13 +48,13 @@ function App() {
         },
         {
           path: '/topics',
-          element: <TopicsPage user={user} />,
+          element: <TopicsPage user={user} setUser={setUser} />,
         },
         {
           // path: '/topics/:topicId',
-           //   path: '/cards/:topicId?language', или так?
-           path: 'cardsTest',
-           element: <CardsPage />,
+          //   path: '/cards/:topicId?language', или так?
+          path: 'cardsTest',
+          element: <CardsPage />,
         },
         {
           path: '/account',
@@ -47,10 +64,6 @@ function App() {
           path: '/error',
           element: <ErrorPage />,
         },
-        {
-          path: '/auth',
-          element: <AuthPage user={user} />
-        }
       ],
     },
   ]);
