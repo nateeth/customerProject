@@ -1,7 +1,6 @@
 const express = require('express');
 const { Card, Progress, Language, Topic, User, Sequelize } = require('../../db/models');
 const cardRouter = express.Router();
-const Topic = require('../../db/models/topic');
 const verifyAccessToken = require('../middlewares/verifyAccessToken');
 
 // Все темы
@@ -86,13 +85,7 @@ cardRouter.route('/progress/:userid/:cardid').put(async (req, res) => {
 cardRouter.route('/progress/study/:userid/:cardid').put(async (req, res) => {
   try {
     const { userid, cardid } = req.params;
-cardRouter.route('/progress/study/:userid/:cardid').put(async (req, res) => {
-  try {
-    const { userid, cardid } = req.params;
 
-    const studiedCard = await Progress.findOne({
-      where: { cardid, userid },
-    });
     const studiedCard = await Progress.findOne({
       where: { cardid, userid },
     });
@@ -108,14 +101,6 @@ cardRouter.route('/progress/study/:userid/:cardid').put(async (req, res) => {
         .json({ message: 'Карточка не найдена для данного пользователя' });
     }
 
-    // Обновляем статус на "изучена"
-    await studiedCard.update({ isStudied: true });
-    res.json(studiedCard);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: 'Ошибка сервера' });
-  }
-});
     // Обновляем статус на "изучена"
     await studiedCard.update({ isStudied: true });
     res.json(studiedCard);
