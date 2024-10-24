@@ -1,19 +1,34 @@
 import { useEffect, useState } from 'react';
 import { Box, Button, Typography, Container } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axiosInstance from '../../axiosInstance'
+import {setAccessToken} from '../../axiosInstance'
 
-const TopicPage = () => {
+const TopicPage = ({user, setUser}) => {
   const [topics, setTopics] = useState([]);
   const [selectedLanguage, setSelectedLanguage] = useState('');
   const [languages, setLanguages] = useState([]);
   const navigate = useNavigate();
 
+  // useEffect(() => {
+  //   axiosInstance('/tokens/refresh')
+  //     .then(({ data }) => {
+  //       setTimeout(() => {
+  //         setUser({ status: 'logged', data: data.user });
+  //       }, 1000);
+  //       setAccessToken(data.accessToken);
+  //     })
+  //     .catch(() => {
+  //       setUser({ status: 'guest', data: null });
+  //       setAccessToken('');
+  //     });
+  // }, []);
+
   useEffect(() => {
     const fetchTopicsAndLanguages = async () => {
       try {
-        const topicsResponse = await axios.get('/api/topics');
-        const languagesResponse = await axios.get('/api/languages');
+        const topicsResponse = await axiosInstance.get('/api/topics');
+        const languagesResponse = await axiosInstance.get('/api/languages');
         setTopics(topicsResponse.data);
         setLanguages(languagesResponse.data);
       } catch (error) {

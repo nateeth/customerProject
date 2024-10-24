@@ -4,7 +4,7 @@ const cardRouter = express.Router();
 const verifyAccessToken = require('../middlewares/verifyAccessToken');
 
 // Все темы
-cardRouter.route('/topics').get(async (req, res) => {
+cardRouter.route('/topics').get(verifyAccessToken, async (req, res) => {
   try {
     const topics = await Topic.findAll({
       include: [
@@ -41,11 +41,34 @@ cardRouter.route('/languages').get(async (req, res) => {
 });
 
 // Все карточки по определенной теме
-cardRouter.route('/topics/:topicId').get(async (req, res) => {
+// cardRouter.route('/topics/:topicId').get(async (req, res) => {
+//   try {
+//     const cards = await Card.findAll({
+//       where: { topicId: req.params.topicId },
+//       include: [Progress],
+//     });
+//     res.json(cards);
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json({ message: 'Ошибка при получении карточек' });
+//   }
+// });
+
+cardRouter.route('/topics/:topicId/:authorId').get(async (req, res) => {
   try {
+    const { topicId, authorId } = req.params;
     const cards = await Card.findAll({
-      where: { topicId: req.params.topicId },
-      include: [Progress],
+      where: {
+        topicId,
+        authorId,
+      },
+      include: [
+        {
+          model: Progress,
+          attributes: ['isOpened', 'isStudied'],
+          where: { userId: req.user.id }, // assuming userId is available in req.user
+        },
+      ],
     });
     res.json(cards);
   } catch (error) {
@@ -54,7 +77,7 @@ cardRouter.route('/topics/:topicId').get(async (req, res) => {
   }
 });
 
-// Обработчик для обновления прогресса карточки или создания новой
+// Обработчик для обновления прогресса карточки или создания нового прогресса для этого юзера
 cardRouter.route('/progress/:userid/:cardid').put(async (req, res) => {
   try {
     const { userid, cardid } = req.params;

@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import axios from 'axios';
 import {
   TextField,
   Button,
@@ -8,6 +7,8 @@ import {
   Container,
   FormHelperText,
 } from '@mui/material';
+import axiosInstance from '../../axiosInstance'
+import {setAccessToken} from '../../axiosInstance'
 
 export default function SignupPage({ setUser }) {
   const [formData, setFormData] = useState({
@@ -38,8 +39,9 @@ export default function SignupPage({ setUser }) {
     }
 
     try {
-      const res = await axios.post('/api/auth/signup', formData);
+      const res = await axiosInstance.post('/api/auth/signup', formData);
       setUser(res.data.user);
+      setAccessToken(res.data.accessToken);
     } catch (error) {
       alert('Произошла ошибка: ' + error?.response?.data?.message);
     }
