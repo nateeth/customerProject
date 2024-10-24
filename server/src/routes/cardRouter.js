@@ -1,7 +1,6 @@
 const express = require('express');
-const { Card, Progress, Language } = require('../..db/models');
+const { Card, Progress, Language, Topic } = require('../../db/models');
 const cardRouter = express.Router();
-const Topic = require('../../db/models/topic');
 
 // Все темы
 cardRouter.route('/topics').get(async (req, res) => {
@@ -40,7 +39,7 @@ cardRouter.route('/topics/:topicId').get(async (req, res) => {
 });
 
 // Обработчик для обновления прогресса карточки или создания новой
-cardRouter.route(verifyAccessToken, '/progress/:userid/:cardid').put(async (req, res) => {
+cardRouter.route('/progress/:userid/:cardid').put(async (req, res) => {
   try {
     const { userid, cardid } = req.params;
 
@@ -67,29 +66,27 @@ cardRouter.route(verifyAccessToken, '/progress/:userid/:cardid').put(async (req,
 });
 
 // Обработчик для отметки карточки как изученной
-cardRouter
-  .route(verifyAccessToken, '/progress/study/:userid/:cardid')
-  .put(async (req, res) => {
-    try {
-      const { userid, cardid } = req.params;
+cardRouter.route('/progress/study/:userid/:cardid').put(async (req, res) => {
+  try {
+    const { userid, cardid } = req.params;
 
-      const studiedCard = await Progress.findOne({
-        where: { cardid, userid },
-      });
+    const studiedCard = await Progress.findOne({
+      where: { cardid, userid },
+    });
 
-      if (!studiedCard) {
-        return res
-          .status(404)
-          .json({ message: 'Карточка не найдена для данного пользователя' });
-      }
-
-      // Обновляем статус на "изучена"
-      await studiedCard.update({ isStudied: true });
-      res.json(studiedCard);
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({ message: 'Ошибка сервера' });
+    if (!studiedCard) {
+      return res
+        .status(404)
+        .json({ message: 'Карточка не найдена для данного пользователя' });
     }
-  });
+
+    // Обновляем статус на "изучена"
+    await studiedCard.update({ isStudied: true });
+    res.json(studiedCard);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Ошибка сервера' });
+  }
+});
 
 module.exports = cardRouter;

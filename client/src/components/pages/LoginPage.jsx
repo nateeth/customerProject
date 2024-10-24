@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { TextField, Button, Box, Typography, Container } from '@mui/material';
 
 export default function LoginPage({ setUser }) {
   const [formData, setFormData] = useState({
@@ -14,7 +15,7 @@ export default function LoginPage({ setUser }) {
     });
   };
 
-  const loginHandler = async (event, formData) => {
+  const loginHandler = async (event) => {
     event.preventDefault();
     try {
       const res = await axios.post('/api/auth/login', formData);
@@ -23,8 +24,8 @@ export default function LoginPage({ setUser }) {
       if (error.response) {
         console.error('Ошибка ответа сервера:', error.response.data);
         alert(
-          'Ошибка при входе: ' + error.response.data.message ||
-            'Неизвестная ошибка сервера.',
+          'Ошибка при входе: ' +
+            (error.response.data.message || 'Неизвестная ошибка сервера.'),
         );
       } else if (error.request) {
         console.error('Сервер не ответил:', error.request);
@@ -37,20 +38,49 @@ export default function LoginPage({ setUser }) {
   };
 
   return (
-    <div>
-      <h1>Войти</h1>
-      <form onSubmit={(e) => loginHandler(e, formData)}>
-        <label htmlFor="email">Введите email</label>
-        <input name="email" type="email" value={formData.email} onChange={handleChange} />
-        <label htmlFor="password">Введите пароль</label>
-        <input
-          name="password"
-          type="password"
-          value={formData.password}
-          onChange={handleChange}
-        />
-        <button type="submit">Войти</button>
-      </form>
-    </div>
+    <Container maxWidth="xs">
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        minHeight="100vh"
+      >
+        <Typography component="h1" variant="h5">
+          Войти
+        </Typography>
+        <Box component="form" onSubmit={loginHandler} sx={{ mt: 3 }}>
+          <TextField
+            fullWidth
+            label="Введите email"
+            name="email"
+            type="email"
+            value={formData.email}
+            onChange={handleChange}
+            margin="normal"
+            required
+          />
+          <TextField
+            fullWidth
+            label="Введите пароль"
+            name="password"
+            type="password"
+            value={formData.password}
+            onChange={handleChange}
+            margin="normal"
+            required
+          />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            sx={{ mt: 3 }}
+          >
+            Войти
+          </Button>
+        </Box>
+      </Box>
+    </Container>
   );
 }
