@@ -3,19 +3,6 @@ import { Box, Button, Typography, Container } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-// const mockTopics = [
-//   { id: 1, topicName: 'Еда', langId: 'english', wordCount: 10, author: 'Иван' },
-//   { id: 2, topicName: 'Транспорт', langId: 'english', wordCount: 8, author: 'Алексей' },
-//   { id: 3, topicName: 'Знакомство', langId: 'french', wordCount: 15, author: 'Светлана' },
-//   { id: 4, topicName: 'Спорт', langId: 'german', wordCount: 12, author: 'Мария' },
-// ];
-
-// const mockLanguages = [
-//   { id: 'english', name: 'Английский' },
-//   { id: 'french', name: 'Французский' },
-//   { id: 'german', name: 'Немецкий' },
-// ];
-
 const TopicPage = () => {
   const [topics, setTopics] = useState([]);
   const [selectedLanguage, setSelectedLanguage] = useState('');
@@ -34,9 +21,6 @@ const TopicPage = () => {
       }
     };
     fetchTopicsAndLanguages();
-
-    // setTopics(mockTopics); // потом удалить!
-    // setLanguages(mockLanguages); // потом удалить!
   }, []);
 
   const handleTopicClick = (topicId) => {
@@ -57,7 +41,7 @@ const TopicPage = () => {
             onClick={() => setSelectedLanguage(language.id)}
             sx={{ mr: 1 }}
           >
-            {language.name}
+            {language.langName}
           </Button>
         ))}
       </Box>
@@ -84,7 +68,7 @@ const TopicPage = () => {
             >
               <Typography variant="h6">{topic.topicName}</Typography>
               <Typography variant="body2">Количество слов: {topic.wordCount}</Typography>
-              <Typography variant="body2">Автор: {topic.author}</Typography>
+              <Typography variant="body2">Автор: {topic.User.userName}</Typography>
             </Box>
           ))}
       </Box>
