@@ -1,78 +1,116 @@
-import React from 'react';
-import axios from "axios";
+import { useState } from 'react';
+import axios from 'axios';
+import {
+  TextField,
+  Button,
+  Box,
+  Typography,
+  Container,
+  FormHelperText,
+} from '@mui/material';
 
-export default function SignupPage({setUser}) {
+export default function SignupPage({ setUser }) {
   const [formData, setFormData] = useState({
-    email: "",
-    name: "",
-    password: "",
-    confirmPassword: "",
+    email: '',
+    name: '',
+    password: '',
+    confirmPassword: '',
   });
+
+  const [passwordError, setPasswordError] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
+
+    if (e.target.name === 'confirmPassword') {
+      setPasswordError(e.target.value !== formData.password);
+    }
   };
 
-  const registrationHandler = async (event, formData) => {
+  const registrationHandler = async (event) => {
     event.preventDefault();
+    if (formData.password !== formData.confirmPassword) {
+      setPasswordError(true);
+      return;
+    }
+
     try {
-      const res = await axios.post("/api/auth/registration", formData);
+      const res = await axios.post('/api/auth/signup', formData);
       setUser(res.data.user);
     } catch (error) {
-      if (error.response) {
-        console.error("Ошибка ответа сервера:", error.response.data);
-        alert("Произошла ошибка: " + error.response.data.message);
-      } else if (error.request) {
-        console.error("Сервер не ответил:", error.request);
-        alert("Сервер не отвечает. Пожалуйста, попробуйте позже.");
-      } else {
-        console.error("Ошибка при настройке запроса:", error.message);
-        alert("Произошла ошибка: " + error.message);
-      }
+      alert('Произошла ошибка: ' + error?.response?.data?.message);
     }
   };
 
   return (
-    <div>
-      <h1>Регистрация</h1>
-      <form onSubmit={(e) => registrationHandler(e, formData)}>
-        <label htmlFor="name">Введите login</label>
-        <input
-          name="name"
-          type="text"
-          value={formData.name}
-          onChange={handleChange}
-        />
-
-        <label htmlFor="email">Введите email</label>
-        <input
-          name="email"
-          type="email"
-          value={formData.email}
-          onChange={handleChange}
-        />
-
-        <label htmlFor="password">Введите password</label>
-        <input
-          name="password"
-          type="password"
-          value={formData.password}
-          onChange={handleChange}
-        />
-
-        <label htmlFor="confirmPassword">Повторите password</label>
-        <input
-          name="confirmPassword"
-          type="password"
-          value={formData.confirmPassword}
-          onChange={handleChange}
-        />
-
-        <button type="submit">Зарегистрироваться</button>
-      </form>
-    </div>
+    <Container maxWidth="xs">
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        minHeight="100vh"
+      >
+        <Typography component="h1" variant="h5">
+          Регистрация
+        </Typography>
+        <Box component="form" onSubmit={registrationHandler} sx={{ mt: 3 }}>
+          <TextField
+            fullWidth
+            label="Введите логин"
+            name="name"
+            type="text"
+            value={formData.name}
+            onChange={handleChange}
+            margin="normal"
+            required
+          />
+          <TextField
+            fullWidth
+            label="Введите email"
+            name="email"
+            type="email"
+            value={formData.email}
+            onChange={handleChange}
+            margin="normal"
+            required
+          />
+          <TextField
+            fullWidth
+            label="Введите пароль"
+            name="password"
+            type="password"
+            value={formData.password}
+            onChange={handleChange}
+            margin="normal"
+            required
+          />
+          <TextField
+            fullWidth
+            label="Повторите пароль"
+            name="confirmPassword"
+            type="password"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            margin="normal"
+            required
+            error={passwordError}
+          />
+          {passwordError && <FormHelperText error>Пароли не совпадают</FormHelperText>}
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            sx={{ mt: 3 }}
+          >
+            Зарегистрироваться
+          </Button>
+        </Box>
+      </Box>
+    </Container>
   );
 }

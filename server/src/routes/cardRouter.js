@@ -1,5 +1,5 @@
 const express = require('express');
-const { Card, Progress, Language } = require('../../db/models');
+const { Card, Progress, Language, Topic, User, Sequelize } = require('../../db/models');
 const cardRouter = express.Router();
 const Topic = require('../../db/models/topic');
 const verifyAccessToken = require('../middlewares/verifyAccessToken');
@@ -7,7 +7,22 @@ const verifyAccessToken = require('../middlewares/verifyAccessToken');
 // Все темы
 cardRouter.route('/topics').get(async (req, res) => {
   try {
-    const topics = await Topic.findAll();
+    const topics = await Topic.findAll({
+      include: [
+        {
+          model: User,
+          attributes: ['userName'],
+        },
+        {
+          model: Card,
+          attributes: [],
+        },
+      ],
+      attributes: {
+        include: [[Sequelize.fn('COUNT', Sequelize.col('Cards.id')), 'wordCount']],
+      },
+      group: ['Topic.id', 'User.id'],
+    });
     res.json(topics);
   } catch (error) {
     console.log(error);
@@ -71,7 +86,13 @@ cardRouter.route('/progress/:userid/:cardid').put(async (req, res) => {
 cardRouter.route('/progress/study/:userid/:cardid').put(async (req, res) => {
   try {
     const { userid, cardid } = req.params;
+cardRouter.route('/progress/study/:userid/:cardid').put(async (req, res) => {
+  try {
+    const { userid, cardid } = req.params;
 
+    const studiedCard = await Progress.findOne({
+      where: { cardid, userid },
+    });
     const studiedCard = await Progress.findOne({
       where: { cardid, userid },
     });
@@ -81,7 +102,20 @@ cardRouter.route('/progress/study/:userid/:cardid').put(async (req, res) => {
         .status(404)
         .json({ message: 'Карточка не найдена для данного пользователя' });
     }
+    if (!studiedCard) {
+      return res
+        .status(404)
+        .json({ message: 'Карточка не найдена для данного пользователя' });
+    }
 
+    // Обновляем статус на "изучена"
+    await studiedCard.update({ isStudied: true });
+    res.json(studiedCard);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Ошибка сервера' });
+  }
+});
     // Обновляем статус на "изучена"
     await studiedCard.update({ isStudied: true });
     res.json(studiedCard);
