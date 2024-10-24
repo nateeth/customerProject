@@ -34,8 +34,10 @@ function App() {
           element: <TopicsPage user={user} />,
         },
         {
-          path: '/topics/:topicId',
-          element: <CardsPage />,
+          // path: '/topics/:topicId',
+           //   path: '/cards/:topicId?language', или так?
+           path: 'cardsTest',
+           element: <CardsPage />,
         },
         {
           path: '/account',
