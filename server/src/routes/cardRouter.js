@@ -1,11 +1,26 @@
 const express = require('express');
-const { Card, Progress, Language, Topic } = require('../../db/models');
+const { Card, Progress, Language, Topic, User, Sequelize } = require('../../db/models');
 const cardRouter = express.Router();
 
 // Все темы
 cardRouter.route('/topics').get(async (req, res) => {
   try {
-    const topics = await Topic.findAll();
+    const topics = await Topic.findAll({
+      include: [
+        {
+          model: User,
+          attributes: ['userName'],
+        },
+        {
+          model: Card,
+          attributes: [],
+        },
+      ],
+      attributes: {
+        include: [[Sequelize.fn('COUNT', Sequelize.col('Cards.id')), 'wordCount']],
+      },
+      group: ['Topic.id', 'User.id'],
+    });
     res.json(topics);
   } catch (error) {
     console.log(error);
