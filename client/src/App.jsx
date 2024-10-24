@@ -8,6 +8,7 @@ import TopicsPage from './components/pages/TopicsPage';
 import CardsPage from './components/pages/CardsPage';
 import AccountPage from './components/pages/AccountPage';
 import ErrorPage from './components/pages/ErrorPage';
+import AuthPage from './components/pages/AuthPage';
 
 function App() {
   const [user, setUser] = useState(0);
@@ -44,6 +45,10 @@ function App() {
           path: '/error',
           element: <ErrorPage />,
         },
+        {
+          path: '/auth',
+          element: <AuthPage user={user} />
+        }
       ],
     },
   ]);
