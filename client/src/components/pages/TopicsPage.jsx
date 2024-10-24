@@ -1,9 +1,23 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
 
-export default function TopicsPage() {
+export default function TopicsPage({ user }) {
+  const [topics, setTopics] = useState([]);
+  useEffect(() => {
+    axios.get('/api/topics/').then(({ data }) => setTopics(data));
+  }, []);
+
   return (
     <div>
       <h1>Темы</h1>
+      <ul>
+        {topics?.map((topic) => (
+          <li key={topic.id}>
+            <Link to={`/topics/${topic.id}`}>{topic.name}</Link>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
