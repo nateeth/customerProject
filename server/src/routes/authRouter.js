@@ -1,9 +1,9 @@
-const express = require('express'); 
+const express = require('express');
 const bcrypt = require('bcrypt'); // хэширует пароль
 const authRouter = express.Router();
 const { User } = require('../../db/models');
-const generateTokens = require('../utils/generateTokens'); 
-const cookieConfig = require('../configs/cookieConfig'); 
+const generateTokens = require('../utils/generateTokens');
+const cookieConfig = require('../configs/cookieConfig');
 
 authRouter.post('/signup', async (req, res) => {
   const { email, name, password } = req.body;
