@@ -57,8 +57,8 @@ function App() {
           element: <CardsPage />,
         },
         {
-          path: '/account',
-          element: <AccountPage />,
+          path: '/account/:userId',
+          element: <AccountPage user={user} />,
         },
         {
           path: '/error',
