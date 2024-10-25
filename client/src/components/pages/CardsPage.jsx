@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, Typography, Button } from '@mui/material';
+import { Box, Typography, Button, CircularProgress } from '@mui/material';
 import { motion } from 'framer-motion';
 import axiosInstance from '../../axiosInstance';
 import { useParams, useLocation } from 'react-router-dom';
@@ -9,12 +9,13 @@ const CardsPage = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const selectedLanguage = searchParams.get('language');
-  
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [learnedCards, setLearnedCards] = useState(new Set());
   const [cardData, setCardData] = useState([]);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
     const fetchCards = async () => {
@@ -24,6 +25,8 @@ const CardsPage = () => {
       } catch (error) {
         console.error('Ошибка загрузки карточек:', error);
         setError('Не удалось загрузить карточки. Попробуйте позже.');
+      } finally {
+        setLoading(false);
       }
     };
     fetchCards();
@@ -58,10 +61,19 @@ const CardsPage = () => {
     );
   }
 
+  if (loading) {
+    return (
+      <Box display="flex" flexDirection="column" alignItems="center" mt={4}>
+        <CircularProgress />
+        <Typography variant="h6">Загрузка карточек...</Typography>
+      </Box>
+    );
+  }
+
   if (cardData.length === 0) {
     return (
       <Box display="flex" flexDirection="column" alignItems="center" mt={4}>
-        <Typography variant="h6">Загрузка карточек...</Typography>
+        <Typography variant="h6">Нет карточек для отображения.</Typography>
       </Box>
     );
   }
@@ -151,3 +163,4 @@ const CardsPage = () => {
   );
 };
 
+export default CardsPage;
