@@ -1,23 +1,37 @@
-import React from 'react';
+import { useState } from 'react';
 
-export default function AccountPage() {
+export default function AccountPage({ user }) {
+  const [formUser, setFormUser] = useState({
+    userName: '',
+    userEmail: '',
+    userHashPass: '',
+    userProgress: '',
+    userProgress: '',
+  });
+
   return (
-    <div>
-      <h1>Личный кабинет пользователя {user}</h1>
-      <div className="cardOfUser">
-        <div className="userName">userName</div>
-        <Button size="sm" className="userNameButton">
-          userName
-        </Button>
-        <div className="userEmail">userEmail</div>
-        <div className="userHashPass">userHashPass</div>
-        <Button size="sm" className="userHashPassButton">
-          userHashPass
-        </Button>
-        <div className="userProgress">userProgress</div>
-        <div className="userGroups">userGroups</div>
-        <div className="userIsAdmin">userIsAdmin</div>
-      </div>
-    </div>
+    <>
+      <h1>Личный кабинет пользователя user</h1>
+      <div className="userName">userName</div>
+      <div className="userEmail">userEmail</div>
+      <div className="userHashPassButton">userHashPass</div>
+      <div className="userProgress">userProgress</div>
+      <ol className="userGroups">размап userGroups</ol>
+
+
+
+
+      <div className="userIsAdmin">userIsAdmin</div>
+    </>
   );
 }
+
+
+
+// {messages.map((message) => (
+//     <MessageCard
+//       key={message.id}
+//       message={message}
+//       onDelete={() => handleDeletePost(message.id)}
+//     />
+//   ))}

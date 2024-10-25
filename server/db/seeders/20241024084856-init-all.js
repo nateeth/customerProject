@@ -88,7 +88,8 @@ module.exports = {
         { langName: 'English', createdAt: new Date(), updatedAt: new Date() },
         { langName: 'Italian', createdAt: new Date(), updatedAt: new Date() },
         { langName: 'Chuvash', createdAt: new Date(), updatedAt: new Date() },
-        { langName: 'Spanish', createdAt: new Date(), updatedAt: new Date() },
+        { langName: 'Spanish', createdAt: new Date(), updatedAt: new Date() },  
+        { langName: 'German', createdAt: new Date(), updatedAt: new Date() }, //*********************************************
       ]);
 
       // Сидеры для тем
@@ -149,7 +150,7 @@ module.exports = {
         },
 
         {
-          topicName: 'Знакомство',
+          topicName: 'Путешествия',
           isPublic: true,
           langId: languages[1].id,
           authorId: teachers[0].id,
@@ -157,8 +158,9 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
+
         {
-          topicName: 'Путешествия',
+          topicName: 'Знакомство',
           isPublic: true,
           langId: languages[1].id,
           authorId: teachers[0].id,
@@ -169,14 +171,15 @@ module.exports = {
         {
           topicName: 'Еда',
           isPublic: true,
-          langId: languages[1].id,
+          langId: languages[2].id,
           authorId: teachers[0].id,
           groupId: groups[0].id,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
+
         {
-          topicName: 'Животные',
+          topicName: 'Еда',
           isPublic: true,
           langId: languages[1].id,
           authorId: teachers[0].id,
@@ -193,6 +196,16 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
+        {
+          topicName: 'Животные',
+          isPublic: true,
+          langId: languages[1].id,
+          authorId: teachers[0].id,
+          groupId: groups[0].id,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+
         {
           topicName: 'Веб-разработка',
           isPublic: true,
@@ -221,15 +234,7 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
-        {
-          topicName: 'Еда',
-          isPublic: true,
-          langId: languages[2].id,
-          authorId: teachers[0].id,
-          groupId: groups[0].id,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
+
         {
           topicName: 'Животные',
           isPublic: true,
@@ -286,6 +291,15 @@ module.exports = {
           updatedAt: new Date(),
         },
         {
+          topicName: 'Веб-разработка',
+          isPublic: true,
+          langId: languages[3].id,
+          authorId: teachers[0].id,
+          groupId: groups[0].id,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
           topicName: 'Животные',
           isPublic: true,
           langId: languages[3].id,
@@ -296,15 +310,6 @@ module.exports = {
         },
         {
           topicName: 'Погода',
-          isPublic: true,
-          langId: languages[3].id,
-          authorId: teachers[0].id,
-          groupId: groups[0].id,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          topicName: 'Веб-разработка',
           isPublic: true,
           langId: languages[3].id,
           authorId: teachers[0].id,
@@ -1415,54 +1420,6 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
-        {
-          value: 'Багаж',
-          translation: 'Багаж',
-          topicId: topics[1].id,
-          authorId: teachers[0].id,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          value: 'Карта',
-          translation: 'Карта',
-          topicId: topics[1].id,
-          authorId: teachers[0].id,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          value: 'Билет',
-          translation: 'Билет',
-          topicId: topics[1].id,
-          authorId: teachers[0].id,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          value: 'Гид',
-          translation: 'Гид',
-          topicId: topics[1].id,
-          authorId: teachers[0].id,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          value: 'Путешестви',
-          translation: 'Путешествие',
-          topicId: topics[1].id,
-          authorId: teachers[0].id,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          value: 'Приключение',
-          translation: 'Приключение',
-          topicId: topics[1].id,
-          authorId: teachers[0].id,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
 
         // Еда
         {
@@ -1477,234 +1434,6 @@ module.exports = {
           value: 'Су',
           translation: 'Вода',
           topicId: topics[2].id,
-          authorId: teachers[0].id,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          value: 'Хлеб',
-          translation: 'Хлеб',
-          topicId: topics[2].id,
-          authorId: teachers[0].id,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          value: 'Фрукты',
-          translation: 'Фрукты',
-          topicId: topics[2].id,
-          authorId: teachers[0].id,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          value: 'Овощи',
-          translation: 'Овощи',
-          topicId: topics[2].id,
-          authorId: teachers[0].id,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          value: 'Мясо',
-          translation: 'Мясо',
-          topicId: topics[2].id,
-          authorId: teachers[0].id,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          value: 'Рыба',
-          translation: 'Рыба',
-          topicId: topics[2].id,
-          authorId: teachers[0].id,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          value: 'Десерт',
-          translation: 'Десерт',
-          topicId: topics[2].id,
-          authorId: teachers[0].id,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          value: 'Завтрак',
-          translation: 'Завтрак',
-          topicId: topics[2].id,
-          authorId: teachers[0].id,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          value: 'Ужин',
-          translation: 'Ужин',
-          topicId: topics[2].id,
-          authorId: teachers[0].id,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-
-        // Животные
-        {
-          value: 'Собака',
-          translation: 'Собака',
-          topicId: topics[3].id,
-          authorId: teachers[0].id,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          value: 'Кошка',
-          translation: 'Кошка',
-          topicId: topics[3].id,
-          authorId: teachers[0].id,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          value: 'Птица',
-          translation: 'Птица',
-          topicId: topics[3].id,
-          authorId: teachers[0].id,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          value: 'Рыба',
-          translation: 'Рыба',
-          topicId: topics[3].id,
-          authorId: teachers[0].id,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          value: 'Лошадь',
-          translation: 'Лошадь',
-          topicId: topics[3].id,
-          authorId: teachers[0].id,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          value: 'Слон',
-          translation: 'Слон',
-          topicId: topics[3].id,
-          authorId: teachers[0].id,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          value: 'Лев',
-          translation: 'Лев',
-          topicId: topics[3].id,
-          authorId: teachers[0].id,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          value: 'Тигр',
-          translation: 'Тигр',
-          topicId: topics[3].id,
-          authorId: teachers[0].id,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          value: 'Медведь',
-          translation: 'Медведь',
-          topicId: topics[3].id,
-          authorId: teachers[0].id,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          value: 'Кролик',
-          translation: 'Кролик',
-          topicId: topics[3].id,
-          authorId: teachers[0].id,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-
-        // Погода
-        {
-          value: 'Солнечно',
-          translation: 'Солнечно',
-          topicId: topics[4].id,
-          authorId: teachers[0].id,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          value: 'Дождливо',
-          translation: 'Дождливо',
-          topicId: topics[4].id,
-          authorId: teachers[0].id,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          value: 'Облачно',
-          translation: 'Облачно',
-          topicId: topics[4].id,
-          authorId: teachers[0].id,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          value: 'Ветреный',
-          translation: 'Ветреный',
-          topicId: topics[4].id,
-          authorId: teachers[0].id,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          value: 'Снежно',
-          translation: 'Снежно',
-          topicId: topics[4].id,
-          authorId: teachers[0].id,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          value: 'Шторм',
-          translation: 'Шторм',
-          topicId: topics[4].id,
-          authorId: teachers[0].id,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          value: 'Жарко',
-          translation: 'Жарко',
-          topicId: topics[4].id,
-          authorId: teachers[0].id,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          value: 'Холодно',
-          translation: 'Холодно',
-          topicId: topics[4].id,
-          authorId: teachers[0].id,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          value: 'Влажно',
-          translation: 'Влажно',
-          topicId: topics[4].id,
-          authorId: teachers[0].id,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          value: 'Туманно',
-          translation: 'Туманно',
-          topicId: topics[4].id,
           authorId: teachers[0].id,
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -2296,23 +2025,23 @@ module.exports = {
   async down(queryInterface, Sequelize) {
     // Удаление зависимостей в UserGroups
     await queryInterface.bulkDelete('UserGroups', null, {});
-  
+
     // Удаление зависимостей в Progresses
     await queryInterface.bulkDelete('Progresses', null, {});
-  
+
     // Удаление карточек
     await queryInterface.bulkDelete('Cards', null, {});
-  
+
     // Удаление тем
     await queryInterface.bulkDelete('Topics', null, {});
-  
+
     // Удаление языков
     await queryInterface.bulkDelete('Languages', null, {});
-  
+
     // Удаление групп
     await queryInterface.bulkDelete('Groups', null, {});
-  
+
     // Удаление пользователей
     await queryInterface.bulkDelete('Users', null, {});
-  }
+  },
 };
