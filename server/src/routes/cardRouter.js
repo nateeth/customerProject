@@ -4,8 +4,8 @@ const cardRouter = express.Router();
 const verifyAccessToken = require('../middlewares/verifyAccessToken');
 const sequelize = require('sequelize');
 
-// Все темы
-cardRouter.route('/topics').get(verifyAccessToken, async (req, res) => {
+// Получение всех тем с подсчетом количества слов в теме
+cardRouter.get('/topics', verifyAccessToken, async (req, res) => {
   try {
     const topics = await Topic.findAll({
       include: [
@@ -30,8 +30,46 @@ cardRouter.route('/topics').get(verifyAccessToken, async (req, res) => {
   }
 });
 
-// Все языки
-cardRouter.route('/languages').get(async (req, res) => {
+// Создание новой темы
+cardRouter.post('/topics', async (req, res) => {
+  const { topicName, isPublic, langId, authorId } = req.body;
+
+  try {
+    const newTopic = await Topic.create({
+      topicName,
+      isPublic,
+      langId,
+      authorId,
+    });
+
+    res.status(201).json(newTopic);
+  } catch (error) {
+    console.error('Ошибка при создании темы:', error);
+    res.status(500).json({ error: 'Не удалось создать тему.' });
+  }
+});
+
+// Создание новой карточки
+cardRouter.post('/cards', async (req, res) => {
+  const { value, translation, topicId, authorId } = req.body;
+
+  try {
+    const newCard = await Card.create({
+      value,
+      translation,
+      topicId,
+      authorId,
+    });
+
+    res.status(201).json(newCard);
+  } catch (error) {
+    console.error('Ошибка при создании карточки:', error);
+    res.status(500).json({ error: 'Не удалось создать карточку.' });
+  }
+});
+
+// Получение всех языков
+cardRouter.get('/languages', async (req, res) => {
   try {
     const languages = await Language.findAll();
     res.json(languages);
@@ -41,21 +79,8 @@ cardRouter.route('/languages').get(async (req, res) => {
   }
 });
 
-// Все карточки по определенной теме
-// cardRouter.route('/topics/:topicId').get(async (req, res) => {
-//   try {
-//     const cards = await Card.findAll({
-//       where: { topicId: req.params.topicId },
-//       include: [Progress],
-//     });
-//     res.json(cards);
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).json({ message: 'Ошибка при получении карточек' });
-//   }
-// });
-
-cardRouter.route('/topics/:topicId/:authorId').get(async (req, res) => {
+// Получение всех карточек по определенной теме и автору
+cardRouter.get('/topics/:topicId/:authorId', async (req, res) => {
   try {
     const { topicId, authorId } = req.params;
     const cards = await Card.findAll({
@@ -78,8 +103,8 @@ cardRouter.route('/topics/:topicId/:authorId').get(async (req, res) => {
   }
 });
 
-// Обработчик для обновления прогресса карточки или создания нового прогресса для этого юзера
-cardRouter.route('/progress/:userid/:cardid').put(async (req, res) => {
+// Обновление прогресса карточки
+cardRouter.put('/progress/:userid/:cardid', async (req, res) => {
   try {
     const { userid, cardid } = req.params;
 
@@ -105,8 +130,8 @@ cardRouter.route('/progress/:userid/:cardid').put(async (req, res) => {
   }
 });
 
-// Обработчик для отметки карточки как изученной
-cardRouter.route('/progress/study/:userid/:cardid').put(async (req, res) => {
+// Отметка карточки как изученной
+cardRouter.put('/progress/study/:userid/:cardid', async (req, res) => {
   try {
     const { userid, cardid } = req.params;
 
@@ -119,13 +144,7 @@ cardRouter.route('/progress/study/:userid/:cardid').put(async (req, res) => {
         .status(404)
         .json({ message: 'Карточка не найдена для данного пользователя' });
     }
-    if (!studiedCard) {
-      return res
-        .status(404)
-        .json({ message: 'Карточка не найдена для данного пользователя' });
-    }
 
-    // Обновляем статус на "изучена"
     await studiedCard.update({ isStudied: true });
     res.json(studiedCard);
   } catch (error) {
@@ -134,14 +153,14 @@ cardRouter.route('/progress/study/:userid/:cardid').put(async (req, res) => {
   }
 });
 
-cardRouter.route('/progress/:user').get(async (req, res) => {
+// Получение прогресса пользователя по всем темам
+cardRouter.get('/progress/:user', async (req, res) => {
   try {
     const userId = req.params.user;
     if (!userId) {
       return res.status(400).json({ message: 'Не передан пользователь' });
     }
 
-    // Проверяем наличие тем, созданных пользователем
     const userTopics = await Topic.findAll({
       where: { authorId: userId },
       attributes: ['id', 'topicName'],
@@ -151,7 +170,6 @@ cardRouter.route('/progress/:user').get(async (req, res) => {
       return res.status(404).json({ message: 'У пользователя нет тем' });
     }
 
-    // Получаем данные о прогрессе
     const userProgress = await Progress.findAll({
       where: { userId },
       include: [
@@ -186,7 +204,6 @@ cardRouter.route('/progress/:user').get(async (req, res) => {
       group: ['Card.topicId', 'Topic.id'],
     });
 
-    // Если у пользователя нет прогресса, создаем данные с нулями
     const result = userTopics.map((topic) => {
       const progress = userProgress.find((p) => p.Card.topicId === topic.id);
       if (progress) {

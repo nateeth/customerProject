@@ -1,64 +1,75 @@
-import React, { useEffect, useState } from 'react';
-import { LinearProgress, Typography, Box } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { Box, Typography, Button } from '@mui/material';
+import { motion } from 'framer-motion';
 import axiosInstance from '../../axiosInstance';
+import { useParams, useLocation } from 'react-router-dom';
 
-export default function AccountPage({ user }) {
-  const [progressData, setProgressData] = useState([]);
-  const [loading, setLoading] = useState(true);
+const CardsPage = () => {
+  const { topicId } = useParams();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const selectedLanguage = searchParams.get('language');
+  
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [flipped, setFlipped] = useState(false);
+  const [learnedCards, setLearnedCards] = useState(new Set());
+  const [cardData, setCardData] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!user) return;
-
-    const fetchProgressData = async () => {
+    const fetchCards = async () => {
       try {
-        setLoading(true);
-        const response = await axiosInstance.get(`/api/progress/${user.id}`);
-        setProgressData(response.data);
-        setError(null); // Сброс ошибки при успешной загрузке
-      } catch (err) {
-        setError(err.response.data.message || err.message);
-      } finally {
-        setLoading(false);
+        const response = await axiosInstance.get(`/api/cards?topicId=${topicId}&language=${selectedLanguage}`);
+        setCardData(response.data);
+      } catch (error) {
+        console.error('Ошибка загрузки карточек:', error);
+        setError('Не удалось загрузить карточки. Попробуйте позже.');
       }
     };
+    fetchCards();
+  }, [topicId, selectedLanguage]);
 
-    fetchProgressData();
-  }, [user]);
+  const handleNext = () => {
+    setFlipped(false);
+    setCurrentIndex((prevIndex) =>
+      prevIndex < cardData.length - 1 ? prevIndex + 1 : prevIndex,
+    );
+  };
+
+  const handlePrevious = () => {
+    setFlipped(false);
+    setCurrentIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : prevIndex));
+  };
+
+  const handleFlip = () => {
+    setFlipped((prev) => !prev);
+  };
+
+  const handleLearned = () => {
+    setLearnedCards((prev) => new Set(prev).add(cardData[currentIndex].id));
+    handleNext();
+  };
+
+  if (error) {
+    return (
+      <Box display="flex" flexDirection="column" alignItems="center" mt={4}>
+        <Typography variant="h6" color="error">{error}</Typography>
+      </Box>
+    );
+  }
+
+  if (cardData.length === 0) {
+    return (
+      <Box display="flex" flexDirection="column" alignItems="center" mt={4}>
+        <Typography variant="h6">Загрузка карточек...</Typography>
+      </Box>
+    );
+  }
+
+  const { word, translation } = cardData[currentIndex];
+  const isLearned = learnedCards.has(cardData[currentIndex].id);
 
   return (
-//     <div>
-//       <h1>Страница аккаунта: {user?.userName}</h1>
-//       <h2>Прогресс</h2>
-
-//       {loading && <p>Загрузка данных...</p>}
-//       {error && <p>Ошибка: {error}</p>}
-
-//       {!error &&
-//         progressData.map((progress) => {
-//           const studiedPercentage = (progress.cardsStudied / progress.totalCards) * 100;
-//           const openedPercentage = (progress.cardsOpened / progress.totalCards) * 100;
-
-//           return (
-//             <Box key={progress.topicName} mb={4}>
-//               <Typography variant="h6">{progress.topicName}</Typography>
-
-//               <Typography variant="body2">Карточек изучено</Typography>
-//               <LinearProgress
-//                 variant="determinate"
-//                 value={studiedPercentage}
-//                 sx={{ mb: 2 }}
-//               />
-
-//               <Typography variant="body2">Карточек открыто</Typography>
-//               <LinearProgress variant="determinate" value={openedPercentage} />
-//             </Box>
-//           );
-//         })}
-//     </div>
-//   );
-// }
-
     <Box display="flex" flexDirection="column" alignItems="center" mt={4}>
       <motion.div
         onClick={handleFlip}
@@ -111,7 +122,6 @@ export default function AccountPage({ user }) {
           <Typography variant="h4">{flipped ? word : translation}</Typography>
         </Box>
       </motion.div>
-
       <Box mt={2}>
         <Button
           variant="outlined"
@@ -141,4 +151,3 @@ export default function AccountPage({ user }) {
   );
 };
 
-export default CardsPage;

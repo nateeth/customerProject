@@ -3,10 +3,10 @@
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Topic extends Model {
-    static associate({ Language, User, Group, Card }) {
+    static associate({ Language, User, Card }) {
       this.belongsTo(Language, { foreignKey: 'langId' });
       this.belongsTo(User, { foreignKey: 'authorId' });
-      this.belongsTo(Group, { foreignKey: 'groupId' });
+      // this.belongsTo(Group, { foreignKey: 'groupId' });
       this.hasMany(Card, { foreignKey: 'topicId' });
     }
   }
@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
       isPublic: DataTypes.BOOLEAN,
       langId: DataTypes.INTEGER,
       authorId: DataTypes.INTEGER,
-      groupId: DataTypes.INTEGER,
+      // groupId: DataTypes.INTEGER,
     },
     {
       sequelize,

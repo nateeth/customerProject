@@ -10,9 +10,11 @@ import AccountPage from './components/pages/AccountPage';
 import ErrorPage from './components/pages/ErrorPage';
 import axiosInstance from './axiosInstance';
 import { setAccessToken } from './axiosInstance';
+import GroupPage from './components/pages/GroupPage';
+import UserTopicsPage from './components/pages/UserTopicsPage';
 
 function App() {
-  const [user, setUser] = useState(0);
+  const [user, setUser] = useState(null);
 
   const logoutHandler = async () => {
     await axiosInstance.get('/auth/logout');
@@ -48,12 +50,10 @@ function App() {
         },
         {
           path: '/topics',
-          element: <TopicsPage user={user} setUser={setUser} />,
+          element: <TopicsPage user={user} />,
         },
         {
-          // path: '/topics/:topicId',
-          //   path: '/cards/:topicId?language', или так?
-          path: 'cardsTest',
+          path: '/cards/:topicId',
           element: <CardsPage />,
         },
         {
@@ -61,9 +61,17 @@ function App() {
           element: <AccountPage user={user} />,
         },
         {
-          path: '/error',
+          path: '*',
           element: <ErrorPage />,
         },
+        {
+          path: '/groups',
+          element: <GroupPage user={user} />,
+        },
+        {
+          path: '/user/topics',
+          element: <UserTopicsPage user={user} />,
+        }
       ],
     },
   ]);
