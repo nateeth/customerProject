@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { TextField, Button, Box, Typography, Container } from '@mui/material';
-import axiosInstance from '../../axiosInstance'
-import {setAccessToken} from '../../axiosInstance'
+import axiosInstance from '../../axiosInstance';
+import { setAccessToken } from '../../axiosInstance';
+import { useNavigate } from 'react-router-dom';
 
 export default function LoginPage({ setUser }) {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({
@@ -22,6 +25,7 @@ export default function LoginPage({ setUser }) {
       const res = await axiosInstance.post('/api/auth/login', formData);
       setUser(res.data.user);
       setAccessToken(res.data.accessToken);
+      navigate('/topics');
     } catch (error) {
       if (error.response) {
         console.error('Ошибка ответа сервера:', error.response.data);
