@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axiosInstance from '../../axiosInstance';
+import { Box, Container, Typography } from '@mui/material';
+import CreateCardsForm from '../ui/CreateCardsForm';
 
 export default function AccountPage({ user }) {
   const [progressData, setProgressData] = useState([]);
@@ -40,6 +42,19 @@ export default function AccountPage({ user }) {
           <p>Карточек открыто: {progress.cardsOpened}</p>
         </div>
       ))}
+       
+        <Box display="flex" flexDirection="column" minHeight="100vh">
+      <Box component="header">
+        <Typography variant="h6" align="center" color="textSecondary" paragraph>
+          Аккаунт
+        </Typography>
+      </Box>
+      <Box component="main" flexGrow={1}>
+        <Container>
+          <CreateCardsForm authorId={user?.id}/>
+        </Container>
+      </Box>
+    </Box>
     </div>
   );
 }

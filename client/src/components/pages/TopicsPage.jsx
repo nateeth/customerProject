@@ -1,28 +1,14 @@
 import { useEffect, useState } from 'react';
-import { Box, Button, Typography, Container } from '@mui/material';
+import { Box, Button, Typography, Container, Snackbar } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import axiosInstance from '../../axiosInstance'
-import {setAccessToken} from '../../axiosInstance'
+import axiosInstance from '../../axiosInstance';
 
-const TopicPage = ({user, setUser}) => {
+const TopicPage = ({ user, setUser }) => {
   const [topics, setTopics] = useState([]);
   const [selectedLanguage, setSelectedLanguage] = useState('');
   const [languages, setLanguages] = useState([]);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   axiosInstance('/tokens/refresh')
-  //     .then(({ data }) => {
-  //       setTimeout(() => {
-  //         setUser({ status: 'logged', data: data.user });
-  //       }, 1000);
-  //       setAccessToken(data.accessToken);
-  //     })
-  //     .catch(() => {
-  //       setUser({ status: 'guest', data: null });
-  //       setAccessToken('');
-  //     });
-  // }, []);
 
   useEffect(() => {
     const fetchTopicsAndLanguages = async () => {
@@ -33,6 +19,7 @@ const TopicPage = ({user, setUser}) => {
         setLanguages(languagesResponse.data);
       } catch (error) {
         console.error('Ошибка загрузки данных:', error);
+        setError('Не удалось загрузить данные. Попробуйте позже.');
       }
     };
     fetchTopicsAndLanguages();
@@ -41,6 +28,12 @@ const TopicPage = ({user, setUser}) => {
   const handleTopicClick = (topicId) => {
     navigate(`/cards/${topicId}?language=${selectedLanguage}`);
   };
+
+  const userId = user.data ? user.data.id : null;
+
+  const filteredTopics = topics.filter((topic) => {
+    return userId && topic.User.id === userId;
+  });
 
   return (
     <Container>
@@ -59,11 +52,18 @@ const TopicPage = ({user, setUser}) => {
             {language.langName}
           </Button>
         ))}
+        <Button
+          variant={selectedLanguage === '' ? 'contained' : 'outlined'}
+          onClick={() => setSelectedLanguage('')}
+          sx={{ ml: 3 }}
+        >
+          Все
+        </Button>
       </Box>
 
       <Box display="flex" flexWrap="wrap" justifyContent="flex-start" gap={2}>
-        {topics
-          .filter((topic) => topic.langId === selectedLanguage)
+        {filteredTopics
+          .filter((topic) => selectedLanguage === '' || topic.langId === selectedLanguage)
           .map((topic) => (
             <Box
               key={topic.id}
@@ -87,6 +87,13 @@ const TopicPage = ({user, setUser}) => {
             </Box>
           ))}
       </Box>
+
+      <Snackbar
+        open={!!error}
+        onClose={() => setError(null)}
+        message={error}
+        autoHideDuration={6000}
+      />
     </Container>
   );
 };
