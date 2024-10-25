@@ -29,9 +29,11 @@ const TopicPage = ({ user, setUser }) => {
     navigate(`/cards/${topicId}?language=${selectedLanguage}`);
   };
 
-  const userId = user.data ? user.data.id : null;
+  const userId = user?.data?.id;
 
   const filteredTopics = topics.filter((topic) => {
+    console.log('Тема:', topic);
+    console.log('userId:', userId);
     return userId && topic.User.id === userId;
   });
 
@@ -83,7 +85,7 @@ const TopicPage = ({ user, setUser }) => {
             >
               <Typography variant="h6">{topic.topicName}</Typography>
               <Typography variant="body2">Количество слов: {topic.wordCount}</Typography>
-              <Typography variant="body2">Автор: {topic.User.userName}</Typography>
+              <Typography variant="body2">Автор: {topic.User?.userName}</Typography>
             </Box>
           ))}
       </Box>
