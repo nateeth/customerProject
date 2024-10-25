@@ -57,9 +57,9 @@ export default function NavigationBar({ user, logoutHandler }) {
           </Box>
         )}
         {user?.id && logoutHandler && (
-          <IconButton onClick={logoutHandler} color="inherit" sx={{ ml: 2 }}>
+          <Button onClick={logoutHandler} color="inherit" sx={{ ml: 2 }}>
             Выйти
-          </IconButton>
+          </Button>
         )}
       </Toolbar>
     </AppBar>
