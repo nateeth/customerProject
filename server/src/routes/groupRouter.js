@@ -24,7 +24,7 @@ groupRouter.route('/groups/:userId').get(async (req, res) => {
     const { userId } = req.params;
     const groups = await Group.findAll({
       where: { userId },
-      attributes: ['id', 'groupName'], // Укажите атрибуты, которые нужно вернуть
+      attributes: ['id', 'groupName'], 
     });
     res.json(groups);
   } catch (error) {
@@ -37,8 +37,6 @@ groupRouter.route('/groups/:groupId/addUser').post(async (req, res) => {
   try {
     const { userId } = req.body;
     const { groupId } = req.params;
-
-    // Проверьте, существует ли уже связь между пользователем и группой
     const existingRelation = await UserGroup.findOne({
       where: { userId, groupId },
     });
@@ -47,7 +45,6 @@ groupRouter.route('/groups/:groupId/addUser').post(async (req, res) => {
       return res.status(400).json({ message: 'Пользователь уже добавлен в группу' });
     }
 
-    // Создайте новую связь в таблице UserGroup
     const userGroup = await UserGroup.create({ userId, groupId });
     res.json(userGroup);
   } catch (error) {

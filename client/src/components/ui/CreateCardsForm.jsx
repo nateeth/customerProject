@@ -14,6 +14,7 @@ import {
   MenuItem,
   InputLabel,
   FormControl,
+  CircularProgress,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -27,11 +28,13 @@ const CreateCardsForm = ({ authorId }) => {
 
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchLanguages = async () => {
       try {
         const response = await fetch('/api/languages');
+        if (!response.ok) throw new Error('Ошибка при загрузке языков');
         const data = await response.json();
         setLanguages(data);
       } catch (error) {
@@ -60,6 +63,7 @@ const CreateCardsForm = ({ authorId }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true);
 
     const topicData = {
       topicName,
@@ -84,6 +88,10 @@ const CreateCardsForm = ({ authorId }) => {
       const createdTopic = await topicResponse.json();
 
       const cardPromises = cards.map((card) => {
+        if (!card.value || !card.translation) {
+          throw new Error('Слово и перевод не могут быть пустыми.');
+        }
+
         const cardData = {
           value: card.value,
           translation: card.translation,
@@ -105,24 +113,26 @@ const CreateCardsForm = ({ authorId }) => {
       setIsPublic(false);
       setSelectedLanguage('');
       setCards([{ value: '', translation: '' }]);
-
       setSuccessMessage('Тема и карточки успешно созданы!');
       setErrorMessage('');
     } catch (error) {
       console.error('Ошибка при создании темы или карточек:', error);
-      setErrorMessage(`Ошибка при создании темы или карточек: ${error.message}`);
+      setErrorMessage(`Ошибка: ${error.message}`);
       setSuccessMessage('');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <Container>
-      <Typography variant="h4" gutterBottom>
+      <Typography variant="h5" gutterBottom>
         Создать тему и карточки
       </Typography>
 
       {errorMessage && <Typography color="error">{errorMessage}</Typography>}
       {successMessage && <Typography color="primary">{successMessage}</Typography>}
+      {loading && <CircularProgress />}
 
       <Box component="form" onSubmit={handleSubmit} sx={{ mb: 4 }}>
         <TextField

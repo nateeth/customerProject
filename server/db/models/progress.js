@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
   class Progress extends Model {
     static associate({ User, Card }) {
       this.belongsTo(User, { foreignKey: 'userId' });
-      this.belongsTo(Card, { foreignKey: 'cardId', onDelete: 'CASCADE' });
+      this.belongsTo(Card, { foreignKey: 'cardId' });
     }
   }
   Progress.init(
@@ -17,13 +17,13 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-    modelName: 'Progress',
-    hooks: {
-      beforeDestroy: async (progress) => {
-        await Card.destroy({ where: { progressId: progress.id } });
+      modelName: 'Progress',
+      hooks: {
+        beforeDestroy: async (progress) => {
+          await Card.destroy({ where: { progressId: progress.id } });
+        },
       },
     },
-  }
   );
   return Progress;
 };

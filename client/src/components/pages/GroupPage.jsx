@@ -32,12 +32,27 @@ export default function GroupPage({ user }) {
     fetchGroups();
   }, [user]);
 
+  const handleCreateGroup = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axiosInstance.post('/api/groups/groups/add', {
+        groupName,
+        userId: user.id,
+      });
+      setGroups([...groups, response.data]);
+      setGroupName('');
+      console.log(`Группа "${response.data.groupName}" создана!`);
+    } catch (err) {
+      console.error('Ошибка при создании группы', err);
+    }
+  };
+
   const handleCreateTopic = async (groupId) => {
     try {
-      const response = await axiosInstance.post(`/api/groups/${groupId}/topics`, {
+      const response = await axiosInstance.post(`/api/groups/groups/${groupId}/topics`, {
         topicName,
-        isPublic: true, // Пример значения, его можно заменить или воспользоваться полем ввода
-        langId: 1, // Пример значения
+        isPublic: true,
+        langId: 1,
         authorId: user.id,
       });
       console.log(`Тема "${response.data.topicName}" создана!`);
@@ -68,7 +83,7 @@ export default function GroupPage({ user }) {
       <h1>GroupPage</h1>
 
       <h2>Создать группу</h2>
-      <Box component="form" onSubmit={(e) => e.preventDefault()} sx={{ mt: 3 }}>
+      <Box component="form" onSubmit={handleCreateGroup} sx={{ mt: 3 }}>
         <TextField
           label="Group Name"
           variant="outlined"
@@ -78,7 +93,7 @@ export default function GroupPage({ user }) {
           required
           sx={{ mb: 2 }}
         />
-        <Button variant="contained" color="primary" fullWidth>
+        <Button type="submit" variant="contained" color="primary" fullWidth>
           Создать группу
         </Button>
       </Box>
@@ -103,7 +118,6 @@ export default function GroupPage({ user }) {
             Создать тему
           </Button>
 
-          {/* Пример интерфейса для создания карточек внутри темы */}
           <List>
             {group.topics?.map((topic) => (
               <ListItem key={topic.id}>
