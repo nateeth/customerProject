@@ -7,18 +7,42 @@ import {
   Container,
   FormHelperText,
 } from '@mui/material';
-import axiosInstance from '../../axiosInstance'
-import {setAccessToken} from '../../axiosInstance'
+import axiosInstance from '../../axiosInstance';
+import { setAccessToken } from '../../axiosInstance';
+import { useNavigate } from 'react-router-dom';
+// validationt password
 
 export default function SignupPage({ setUser }) {
   const [formData, setFormData] = useState({
+    // управляемая форма
     email: '',
     name: '',
     password: '',
     confirmPassword: '',
   });
 
+  const navigate = useNavigate();
+
+  function validPassword(password) {
+    // проверка пароля
+    const lowercase = 'abcdefghijklmnopqrstuvwxyz';
+    const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const special = '!@#$%^&*()-_+=<>,./;:[]{}?|';
+    const digits = '0123456789';
+    return (
+      password &&
+      password.length >= 12 &&
+      password.split('').some((char) => lowercase.includes(char)) &&
+      password.split('').some((char) => uppercase.includes(char)) &&
+      password.split('').some((char) => special.includes(char)) &&
+      password.split('').some((char) => digits.includes(char)) &&
+      password[0] !== 'a' &&
+      password[0] !== 1
+    );
+  }
+
   const [passwordError, setPasswordError] = useState(false);
+  const [passwordValid, setPasswordValid] = useState(true);
 
   const handleChange = (e) => {
     setFormData({
@@ -29,12 +53,20 @@ export default function SignupPage({ setUser }) {
     if (e.target.name === 'confirmPassword') {
       setPasswordError(e.target.value !== formData.password);
     }
+    if (e.target.name === 'password') {
+      setPasswordError(!validPassword(e.target.value));
+      setPasswordValid(validPassword(e.target.value));
+    }
   };
 
   const registrationHandler = async (event) => {
     event.preventDefault();
-    if (formData.password !== formData.confirmPassword) {
+    if (
+      formData.password !== formData.confirmPassword ||
+      !validPassword(formData.password)
+    ) {
       setPasswordError(true);
+      setPasswordValid(false);
       return;
     }
 
@@ -46,7 +78,6 @@ export default function SignupPage({ setUser }) {
       alert('Произошла ошибка: ' + error?.response?.data?.message);
     }
   };
-
   return (
     <Container maxWidth="xs">
       <Box
@@ -88,6 +119,8 @@ export default function SignupPage({ setUser }) {
             value={formData.password}
             onChange={handleChange}
             margin="normal"
+            error={!passwordValid}
+            helperText={!passwordValid ? 'Пароль не соответствует требованиям' : ''}
             required
           />
           <TextField
@@ -108,6 +141,7 @@ export default function SignupPage({ setUser }) {
             variant="contained"
             color="primary"
             sx={{ mt: 3 }}
+            onClick={() => navigate('/')}
           >
             Зарегистрироваться
           </Button>
