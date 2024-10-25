@@ -2,6 +2,7 @@ const express = require('express');
 const { Card, Progress, Language, Topic, User, Sequelize } = require('../../db/models');
 const cardRouter = express.Router();
 const verifyAccessToken = require('../middlewares/verifyAccessToken');
+const sequelize = require('sequelize');
 
 // Все темы
 cardRouter.route('/topics').get(verifyAccessToken, async (req, res) => {
@@ -130,6 +131,84 @@ cardRouter.route('/progress/study/:userid/:cardid').put(async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: 'Ошибка сервера' });
+  }
+});
+
+cardRouter.route('/progress/:user').get(async (req, res) => {
+  try {
+    const userId = req.params.user;
+    if (!userId) {
+      return res.status(400).json({ message: 'Не передан пользователь' });
+    }
+
+    // Проверяем наличие тем, созданных пользователем
+    const userTopics = await Topic.findAll({
+      where: { authorId: userId },
+      attributes: ['id', 'topicName'],
+    });
+
+    if (userTopics.length === 0) {
+      return res.status(404).json({ message: 'У пользователя нет тем' });
+    }
+
+    // Получаем данные о прогрессе
+    const userProgress = await Progress.findAll({
+      where: { userId },
+      include: [
+        {
+          model: Card,
+          attributes: ['topicId'],
+          include: [
+            {
+              model: Topic,
+              attributes: ['topicName'],
+            },
+          ],
+        },
+      ],
+      attributes: [
+        [sequelize.fn('count', sequelize.col('Progress.cardId')), 'totalCards'],
+        [
+          sequelize.fn(
+            'sum',
+            sequelize.literal('CASE WHEN Progress.isStudied THEN 1 ELSE 0 END'),
+          ),
+          'cardsStudied',
+        ],
+        [
+          sequelize.fn(
+            'sum',
+            sequelize.literal('CASE WHEN Progress.isOpened THEN 1 ELSE 0 END'),
+          ),
+          'cardsOpened',
+        ],
+      ],
+      group: ['Card.topicId', 'Topic.id'],
+    });
+
+    // Если у пользователя нет прогресса, создаем данные с нулями
+    const result = userTopics.map((topic) => {
+      const progress = userProgress.find((p) => p.Card.topicId === topic.id);
+      if (progress) {
+        return {
+          topicName: topic.topicName,
+          totalCards: progress.dataValues.totalCards,
+          cardsStudied: progress.dataValues.cardsStudied,
+          cardsOpened: progress.dataValues.cardsOpened,
+        };
+      }
+      return {
+        topicName: topic.topicName,
+        totalCards: 0,
+        cardsStudied: 0,
+        cardsOpened: 0,
+      };
+    });
+
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Произошла ошибка сервера' });
   }
 });
 
