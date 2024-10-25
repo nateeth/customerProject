@@ -1,5 +1,6 @@
 import { AppBar, IconButton, Toolbar, Typography, Button, Box } from '@mui/material';
 import FolderCopyIcon from '@mui/icons-material/FolderCopy';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle'; // Иконка аккаунта
 import { useNavigate } from 'react-router-dom';
 
 export default function NavigationBar({ user, logoutHandler }) {
@@ -18,7 +19,7 @@ export default function NavigationBar({ user, logoutHandler }) {
   };
 
   const handleNavigateToAccount = () => {
-    navigate('/account');
+    navigate(`/account/${user.id}`);
   };
 
   return (
@@ -43,18 +44,21 @@ export default function NavigationBar({ user, logoutHandler }) {
           Funny Cards
         </Typography>
         {user?.id ? (
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Typography
-              variant="subtitle1"
-              color="inherit"
-              sx={{ ml: 'auto', whiteSpace: 'nowrap' }}
-            >
+          <>
+            <Typography variant="subtitle1" color="inherit" sx={{ whiteSpace: 'nowrap' }}>
               Привет, {user.userName}
             </Typography>
-            <Button onClick={handleNavigateToAccount} variant="subtitle1" color="inherit">
+            {/* Кнопка Аккаунт со стилями и иконкой */}
+            <Button
+              variant="contained" // Завернуть в "contained" для четкой кнопки
+              color="secondary"
+              onClick={handleNavigateToAccount}
+              startIcon={<AccountCircleIcon />} // Иконка слева от текста
+              sx={{ ml: 2, textTransform: 'none' }} // Нотация textTransform для отмены заглавных
+            >
               Аккаунт
             </Button>
-          </Box>
+          </>
         ) : (
           <Box sx={{ display: 'flex', alignItems: 'center', ml: 'auto' }}>
             <Button color="inherit" onClick={handleNavigateToSignup}>
@@ -66,9 +70,9 @@ export default function NavigationBar({ user, logoutHandler }) {
           </Box>
         )}
         {user?.id && logoutHandler && (
-          <Button onClick={logoutHandler} color="inherit" sx={{ ml: 0 }}>
+          <IconButton onClick={logoutHandler} color="inherit" sx={{ ml: 2 }}>
             Выйти
-          </Button>
+          </IconButton>
         )}
       </Toolbar>
     </AppBar>

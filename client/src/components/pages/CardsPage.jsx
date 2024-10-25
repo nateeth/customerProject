@@ -1,56 +1,64 @@
-import { useState } from 'react';
-import { Box, Typography, Button } from '@mui/material';
-import { motion } from 'framer-motion';
-import axiosInstance from '../../axiosInstance'
+import React, { useEffect, useState } from 'react';
+import { LinearProgress, Typography, Box } from '@mui/material';
+import axiosInstance from '../../axiosInstance';
 
+export default function AccountPage({ user }) {
+  const [progressData, setProgressData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-const cardData = [
-  { id: 1, word: 'Apple', translation: 'Яблоко' },
-  { id: 2, word: 'Banana', translation: 'Банан' },
-  { id: 3, word: 'Cherry', translation: 'Вишня' },
-];
+  useEffect(() => {
+    if (!user) return;
 
-const CardsPage = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [flipped, setFlipped] = useState(false);
-  const [learnedCards, setLearnedCards] = useState(new Set());
+    const fetchProgressData = async () => {
+      try {
+        setLoading(true);
+        const response = await axiosInstance.get(`/api/progress/${user.id}`);
+        setProgressData(response.data);
+        setError(null); // Сброс ошибки при успешной загрузке
+      } catch (err) {
+        setError(err.response.data.message || err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const handleNext = () => {
-    setFlipped(false);
-    setCurrentIndex((prevIndex) =>
-      prevIndex < cardData.length - 1 ? prevIndex + 1 : prevIndex,
-    );
-  };
-
-  const handlePrevious = () => {
-    setFlipped(false);
-    setCurrentIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : prevIndex));
-  };
-
-  const handleFlip = () => {
-    setFlipped((prev) => !prev);
-  };
-
-  const handleLearned = () => {
-    setLearnedCards((prev) => new Set(prev).add(cardData[currentIndex].id));
-    handleNext();
-  };
-
-  const { word, translation } = cardData[currentIndex];
-
-  const isLearned = learnedCards.has(cardData[currentIndex].id);
-
-  if (isLearned) {
-    return (
-      <Box display="flex" flexDirection="column" alignItems="center" mt={4}>
-        <Button onClick={handleNext} variant="outlined">
-          Вперед
-        </Button>
-      </Box>
-    );
-  }
+    fetchProgressData();
+  }, [user]);
 
   return (
+//     <div>
+//       <h1>Страница аккаунта: {user?.userName}</h1>
+//       <h2>Прогресс</h2>
+
+//       {loading && <p>Загрузка данных...</p>}
+//       {error && <p>Ошибка: {error}</p>}
+
+//       {!error &&
+//         progressData.map((progress) => {
+//           const studiedPercentage = (progress.cardsStudied / progress.totalCards) * 100;
+//           const openedPercentage = (progress.cardsOpened / progress.totalCards) * 100;
+
+//           return (
+//             <Box key={progress.topicName} mb={4}>
+//               <Typography variant="h6">{progress.topicName}</Typography>
+
+//               <Typography variant="body2">Карточек изучено</Typography>
+//               <LinearProgress
+//                 variant="determinate"
+//                 value={studiedPercentage}
+//                 sx={{ mb: 2 }}
+//               />
+
+//               <Typography variant="body2">Карточек открыто</Typography>
+//               <LinearProgress variant="determinate" value={openedPercentage} />
+//             </Box>
+//           );
+//         })}
+//     </div>
+//   );
+// }
+
     <Box display="flex" flexDirection="column" alignItems="center" mt={4}>
       <motion.div
         onClick={handleFlip}
