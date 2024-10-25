@@ -1,7 +1,5 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Button, Typography, Container } from '@mui/material';
-import axiosInstance from '../../axiosInstance'
+import { Box, Button, Typography } from '@mui/material';
 
 const HomePage = () => {
   const navigate = useNavigate();

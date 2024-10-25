@@ -25,6 +25,9 @@ const CreateCardsForm = ({ authorId }) => {
   const [languages, setLanguages] = useState([]);
   const [cards, setCards] = useState([{ value: '', translation: '' }]);
 
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+
   useEffect(() => {
     const fetchLanguages = async () => {
       try {
@@ -33,6 +36,7 @@ const CreateCardsForm = ({ authorId }) => {
         setLanguages(data);
       } catch (error) {
         console.error('Ошибка при загрузке языков:', error);
+        setErrorMessage('Не удалось загрузить языки.');
       }
     };
 
@@ -73,6 +77,10 @@ const CreateCardsForm = ({ authorId }) => {
         body: JSON.stringify(topicData),
       });
 
+      if (!topicResponse.ok) {
+        throw new Error(`Ошибка при создании темы: ${topicResponse.statusText}`);
+      }
+
       const createdTopic = await topicResponse.json();
 
       const cardPromises = cards.map((card) => {
@@ -98,9 +106,12 @@ const CreateCardsForm = ({ authorId }) => {
       setSelectedLanguage('');
       setCards([{ value: '', translation: '' }]);
 
-      console.log('Тема и карточки успешно созданы!');
+      setSuccessMessage('Тема и карточки успешно созданы!');
+      setErrorMessage('');
     } catch (error) {
       console.error('Ошибка при создании темы или карточек:', error);
+      setErrorMessage(`Ошибка при создании темы или карточек: ${error.message}`);
+      setSuccessMessage('');
     }
   };
 
@@ -109,6 +120,10 @@ const CreateCardsForm = ({ authorId }) => {
       <Typography variant="h4" gutterBottom>
         Создать тему и карточки
       </Typography>
+
+      {errorMessage && <Typography color="error">{errorMessage}</Typography>}
+      {successMessage && <Typography color="primary">{successMessage}</Typography>}
+
       <Box component="form" onSubmit={handleSubmit} sx={{ mb: 4 }}>
         <TextField
           fullWidth
@@ -152,7 +167,7 @@ const CreateCardsForm = ({ authorId }) => {
                 value={card.value}
                 onChange={(e) => handleCardChange(index, 'value', e.target.value)}
                 required
-                sx={{ mr: 2 , ml: -2 }}
+                sx={{ mr: 2, ml: -2 }}
               />
               <TextField
                 label="Перевод"
@@ -176,7 +191,7 @@ const CreateCardsForm = ({ authorId }) => {
         >
           Добавить карточку
         </Button>
-        <Button type="submit" variant="contained" color="primary" sx={{ mb: 2, ml:5}}>
+        <Button type="submit" variant="contained" color="primary" sx={{ mb: 2, ml: 5 }}>
           Создать тему
         </Button>
       </Box>

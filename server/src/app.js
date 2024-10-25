@@ -15,4 +15,8 @@ app.use('/api', cardRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/tokens', tokensRouter);
 
+app.use((req, res) => {
+  res.status(404).json({ message: 'Not Found' });
+});
+
 module.exports = app;

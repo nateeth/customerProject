@@ -51,9 +51,7 @@ function App() {
           element: <TopicsPage user={user} setUser={setUser} />,
         },
         {
-          // path: '/topics/:topicId',
-          //   path: '/cards/:topicId?language', или так?
-          path: 'cardsTest',
+          path: '/cards/:topicId',
           element: <CardsPage />,
         },
         {
@@ -61,7 +59,7 @@ function App() {
           element: <AccountPage user={user} />,
         },
         {
-          path: '/error',
+          path: '*',
           element: <ErrorPage />,
         },
       ],
