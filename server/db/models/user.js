@@ -3,7 +3,7 @@
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
-    static associate({ Group, UserGroup, Topic, Card, Progress }) {
+    static associate({ Group, UserGroup, Topic, Card, Progress}) {
       this.hasMany(Group, { foreignKey: 'userId' });
       this.belongsToMany(Group, { through: UserGroup, foreignKey: 'userId' });
       this.hasMany(Topic, { foreignKey: 'authorId' });
@@ -16,7 +16,6 @@ module.exports = (sequelize, DataTypes) => {
       userName: DataTypes.STRING,
       email: DataTypes.STRING,
       hashPass: DataTypes.STRING,
-      progressId: DataTypes.INTEGER,
       isAdmin: DataTypes.BOOLEAN,
     },
     {

@@ -1,6 +1,6 @@
 'use strict';
 
-const { User, Language, Topic, Card, Progress } = require('../models');
+const { User, Language, Topic, Card } = require('../models');
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -12,7 +12,6 @@ module.exports = {
           userName: 'Мария Ивановна',
           email: 'ddd@ddd',
           hashPass: '123',
-          progressId: 1,
           isAdmin: true,
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -21,12 +20,17 @@ module.exports = {
           userName: 'Снежана Денисовна',
           email: 'hhh@hhh',
           hashPass: '123',
-          progressId: 2,
           isAdmin: true,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
       ]);
+
+      console.log('Созданные пользователи:', users);
+
+      if (users.length === 0) {
+        throw new Error('Не удалось создать пользователей');
+      }
 
       // userId: DataTypes.INTEGER,
       // cardId: DataTypes.INTEGER,
@@ -56,6 +60,10 @@ module.exports = {
         { langName: 'Chuvash', createdAt: new Date(), updatedAt: new Date() },
         { langName: 'Spanish', createdAt: new Date(), updatedAt: new Date() },
       ]);
+
+      if (languages.length === 0) {
+        throw new Error('Не удалось создать языки');
+      }
 
       // Сидеры для тем
       const topics = await Topic.bulkCreate([
@@ -217,6 +225,10 @@ module.exports = {
           updatedAt: new Date(),
         },
       ]);
+
+      if (topics.length === 0) {
+        throw new Error('Не удалось создать темы');
+      }
 
       // Создание карточек для английского языка
       const cards = await Card.bulkCreate([
@@ -776,7 +788,7 @@ module.exports = {
           value: 'Ti amo',
           translation: 'Я тебя люблю',
           topicId: topics[6].id,
-          authorId: users[6].id,
+          authorId: users[0].id,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -1533,162 +1545,170 @@ module.exports = {
         },
       ]);
 
-      const progresses = await Progress.bulkCreate([
-        {
-          userId: users[0].id,
-          cardId: cards[0].id,
-          isOpened: true,
-          isStudied: true,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
+      if (cards.length === 0) {
+        throw new Error('Не удалось создать карточки');
+      }
 
-        {
-          userId: users[0].id,
-          cardId: cards[10].id,
-          isOpened: true,
-          isStudied: true,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
+      // const progresses = await Progress.bulkCreate([
+      //   {
+      //     userId: users[0].id,
+      //     cardId: cards[0].id,
+      //     isOpened: true,
+      //     isStudied: true,
+      //     createdAt: new Date(),
+      //     updatedAt: new Date(),
+      //   },
 
-        {
-          userId: users[0].id,
-          cardId: cards[15].id,
-          isOpened: true,
-          isStudied: false,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
+      //   {
+      //     userId: users[0].id,
+      //     cardId: cards[10].id,
+      //     isOpened: true,
+      //     isStudied: true,
+      //     createdAt: new Date(),
+      //     updatedAt: new Date(),
+      //   },
 
-        {
-          userId: users[0].id,
-          cardId: cards[20].id,
-          isOpened: true,
-          isStudied: true,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
+      //   {
+      //     userId: users[0].id,
+      //     cardId: cards[15].id,
+      //     isOpened: true,
+      //     isStudied: false,
+      //     createdAt: new Date(),
+      //     updatedAt: new Date(),
+      //   },
 
-        {
-          userId: users[0].id,
-          cardId: cards[30].id,
-          isOpened: true,
-          isStudied: false,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
+      //   {
+      //     userId: users[0].id,
+      //     cardId: cards[20].id,
+      //     isOpened: true,
+      //     isStudied: true,
+      //     createdAt: new Date(),
+      //     updatedAt: new Date(),
+      //   },
 
-        {
-          userId: users[0].id,
-          cardId: cards[40].id,
-          isOpened: true,
-          isStudied: false,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
+      //   {
+      //     userId: users[0].id,
+      //     cardId: cards[30].id,
+      //     isOpened: true,
+      //     isStudied: false,
+      //     createdAt: new Date(),
+      //     updatedAt: new Date(),
+      //   },
 
-        {
-          userId: users[0].id,
-          cardId: cards[45].id,
-          isOpened: true,
-          isStudied: true,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userId: users[0].id,
-          cardId: cards[12].id,
-          isOpened: true,
-          isStudied: true,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userId: users[0].id,
-          cardId: cards[90].id,
-          isOpened: true,
-          isStudied: true,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
+      //   {
+      //     userId: users[0].id,
+      //     cardId: cards[40].id,
+      //     isOpened: true,
+      //     isStudied: false,
+      //     createdAt: new Date(),
+      //     updatedAt: new Date(),
+      //   },
 
-        {
-          userId: users[0].id,
-          cardId: cards[100].id,
-          isOpened: true,
-          isStudied: false,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
+      //   {
+      //     userId: users[0].id,
+      //     cardId: cards[45].id,
+      //     isOpened: true,
+      //     isStudied: true,
+      //     createdAt: new Date(),
+      //     updatedAt: new Date(),
+      //   },
+      //   {
+      //     userId: users[0].id,
+      //     cardId: cards[12].id,
+      //     isOpened: true,
+      //     isStudied: true,
+      //     createdAt: new Date(),
+      //     updatedAt: new Date(),
+      //   },
+      //   {
+      //     userId: users[0].id,
+      //     cardId: cards[90].id,
+      //     isOpened: true,
+      //     isStudied: true,
+      //     createdAt: new Date(),
+      //     updatedAt: new Date(),
+      //   },
 
-        {
-          userId: users[1].id,
-          cardId: cards[115].id,
-          isOpened: true,
-          isStudied: true,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
+      //   {
+      //     userId: users[0].id,
+      //     cardId: cards[100].id,
+      //     isOpened: true,
+      //     isStudied: false,
+      //     createdAt: new Date(),
+      //     updatedAt: new Date(),
+      //   },
 
-        {
-          userId: users[1].id,
-          cardId: cards[111].id,
-          isOpened: true,
-          isStudied: true,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userId: users[1].id,
-          cardId: cards[112].id,
-          isOpened: true,
-          isStudied: true,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userId: users[1].id,
-          cardId: cards[116].id,
-          isOpened: true,
-          isStudied: true,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
+      //   {
+      //     userId: users[1].id,
+      //     cardId: cards[115].id,
+      //     isOpened: true,
+      //     isStudied: true,
+      //     createdAt: new Date(),
+      //     updatedAt: new Date(),
+      //   },
 
-        {
-          userId: users[1].id,
-          cardId: cards[135].id,
-          isOpened: true,
-          isStudied: true,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userId: users[1].id,
-          cardId: cards[145].id,
-          isOpened: true,
-          isStudied: false,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userId: users[1].id,
-          cardId: cards[141].id,
-          isOpened: true,
-          isStudied: false,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userId: users[1].id,
-          cardId: cards[142].id,
-          isOpened: true,
-          isStudied: false,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-      ]);
+      //   {
+      //     userId: users[1].id,
+      //     cardId: cards[111].id,
+      //     isOpened: true,
+      //     isStudied: true,
+      //     createdAt: new Date(),
+      //     updatedAt: new Date(),
+      //   },
+      //   {
+      //     userId: users[1].id,
+      //     cardId: cards[112].id,
+      //     isOpened: true,
+      //     isStudied: true,
+      //     createdAt: new Date(),
+      //     updatedAt: new Date(),
+      //   },
+      //   {
+      //     userId: users[1].id,
+      //     cardId: cards[116].id,
+      //     isOpened: true,
+      //     isStudied: true,
+      //     createdAt: new Date(),
+      //     updatedAt: new Date(),
+      //   },
+
+      //   {
+      //     userId: users[1].id,
+      //     cardId: cards[135].id,
+      //     isOpened: true,
+      //     isStudied: true,
+      //     createdAt: new Date(),
+      //     updatedAt: new Date(),
+      //   },
+      //   {
+      //     userId: users[1].id,
+      //     cardId: cards[145].id,
+      //     isOpened: true,
+      //     isStudied: false,
+      //     createdAt: new Date(),
+      //     updatedAt: new Date(),
+      //   },
+      //   {
+      //     userId: users[1].id,
+      //     cardId: cards[141].id,
+      //     isOpened: true,
+      //     isStudied: false,
+      //     createdAt: new Date(),
+      //     updatedAt: new Date(),
+      //   },
+      //   {
+      //     userId: users[1].id,
+      //     cardId: cards[142].id,
+      //     isOpened: true,
+      //     isStudied: false,
+      //     createdAt: new Date(),
+      //     updatedAt: new Date(),
+      //   },
+      // ]);
+
+      // if (progresses.length === 0) {
+      //   throw new Error('Не удалось создать прогресс');
+      // }
     } catch (error) {
       console.error(
         '----------------------------------------------Error seeding data:',
@@ -1702,8 +1722,8 @@ module.exports = {
     // Удаление зависимостей в UserGroups
     await queryInterface.bulkDelete('UserGroups', null, {});
 
-    // Удаление зависимостей в Progresses
-    await queryInterface.bulkDelete('Progresses', null, {});
+    // // Удаление зависимостей в Progresses
+    // await queryInterface.bulkDelete('Progresses', null, {});
 
     // Удаление карточек
     await queryInterface.bulkDelete('Cards', null, {});
