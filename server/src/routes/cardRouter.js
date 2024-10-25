@@ -83,19 +83,27 @@ cardRouter.get('/languages', async (req, res) => {
 cardRouter.get('/topics/:topicId/:authorId', async (req, res) => {
   try {
     const { topicId, authorId } = req.params;
+    const { language } = req.query;
+
     const cards = await Card.findAll({
       where: {
         topicId,
         authorId,
+        ...(language && { langId: language }),
       },
-      include: [
-        {
-          model: Progress,
-          attributes: ['isOpened', 'isStudied'],
-          where: { userId: req.user.id }, // assuming userId is available in req.user
-        },
-      ],
+      // include: [
+      //   {
+      //     model: Progress,
+      //     attributes: ['isOpened', 'isStudied'],
+      //     where: { userId: req.user.id },
+      //   },
+      // ],
     });
+
+    if (!cards.length) {
+      return res.status(404).json({ message: 'Карточки не найдены.' });
+    }
+
     res.json(cards);
   } catch (error) {
     console.log(error);

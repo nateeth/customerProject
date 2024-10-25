@@ -3,7 +3,7 @@ import { Box, Button, Typography, Container, Snackbar } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../axiosInstance';
 
-const TopicPage = ({ user, setUser }) => {
+const TopicPage = ({ user }) => {
   const [topics, setTopics] = useState([]);
   const [selectedLanguage, setSelectedLanguage] = useState('');
   const [languages, setLanguages] = useState([]);
@@ -17,6 +17,7 @@ const TopicPage = ({ user, setUser }) => {
         const languagesResponse = await axiosInstance.get('/api/languages');
         setTopics(topicsResponse.data);
         setLanguages(languagesResponse.data);
+        console.log('Языки:', languagesResponse.data);
       } catch (error) {
         console.error('Ошибка загрузки данных:', error);
         setError('Не удалось загрузить данные. Попробуйте позже.');
@@ -26,19 +27,29 @@ const TopicPage = ({ user, setUser }) => {
   }, []);
 
   const handleTopicClick = (topicId) => {
-    navigate(`/cards/${topicId}?language=${selectedLanguage}`);
+    console.log(`ПЕРЕХОДИМ НА ТОПИК С АЙДИ: ${topicId} ЯЗЫК: ${selectedLanguage}`);
+    const url = selectedLanguage
+      ? `/cards/${topicId}?language=${selectedLanguage}`
+      : `/cards/${topicId}`;
+    navigate(url);
   };
 
-  const userId = user?.data?.id;
+  const userId = user?.id;
 
-  const filteredTopics = topics.filter((topic) => {
-    console.log('Тема:', topic);
-    console.log('userId:', userId);
-    return userId && topic.User.id === userId;
-  });
+  const filteredTopics = topics.filter((topic) =>
+    userId ? topic.authorId === userId : true,
+  );
+
+  if (filteredTopics.length === 0) {
+    return (
+      <Container>
+        <Typography variant="h6">У вас нет доступных тем для отображения.</Typography>
+      </Container>
+    );
+  }
 
   return (
-    <Container>
+    <Container sx={{ pb: 4 }}>
       <Typography variant="h4" gutterBottom mt={4}>
         Выберите язык и тему для тренировки
       </Typography>
@@ -48,7 +59,10 @@ const TopicPage = ({ user, setUser }) => {
           <Button
             key={language.id}
             variant={selectedLanguage === language.id ? 'contained' : 'outlined'}
-            onClick={() => setSelectedLanguage(language.id)}
+            onClick={() => {
+              console.log(`Выбранный язык: ${language.id}`);
+              setSelectedLanguage(language.id);
+            }}
             sx={{ mr: 1 }}
           >
             {language.langName}
