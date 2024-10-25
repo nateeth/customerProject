@@ -1,6 +1,6 @@
 import { AppBar, IconButton, Toolbar, Typography, Button, Box } from '@mui/material';
 import FolderCopyIcon from '@mui/icons-material/FolderCopy';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle'; // Иконка аккаунта
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useNavigate } from 'react-router-dom';
 
 export default function NavigationBar({ user, logoutHandler }) {
@@ -48,13 +48,12 @@ export default function NavigationBar({ user, logoutHandler }) {
             <Typography variant="subtitle1" color="inherit" sx={{ whiteSpace: 'nowrap' }}>
               Привет, {user.userName}
             </Typography>
-            {/* Кнопка Аккаунт со стилями и иконкой */}
             <Button
-              variant="contained" // Завернуть в "contained" для четкой кнопки
+              variant="contained" 
               color="secondary"
               onClick={handleNavigateToAccount}
-              startIcon={<AccountCircleIcon />} // Иконка слева от текста
-              sx={{ ml: 2, textTransform: 'none' }} // Нотация textTransform для отмены заглавных
+              startIcon={<AccountCircleIcon />} 
+              sx={{ ml: 2, textTransform: 'none' }} 
             >
               Аккаунт
             </Button>
