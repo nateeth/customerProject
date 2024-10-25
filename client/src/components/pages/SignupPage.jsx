@@ -74,6 +74,7 @@ export default function SignupPage({ setUser }) {
       const res = await axiosInstance.post('/api/auth/signup', formData);
       setUser(res.data.user);
       setAccessToken(res.data.accessToken);
+      navigate('/topics');
     } catch (error) {
       alert('Произошла ошибка: ' + error?.response?.data?.message);
     }
@@ -141,7 +142,6 @@ export default function SignupPage({ setUser }) {
             variant="contained"
             color="primary"
             sx={{ mt: 3 }}
-            onClick={() => navigate('/')}
           >
             Зарегистрироваться
           </Button>
