@@ -29,12 +29,12 @@ const TopicPage = ({ user, setUser }) => {
     navigate(`/cards/${topicId}?language=${selectedLanguage}`);
   };
 
-  const userId = user?.data?.id;
+  const userId = user?.id;
 
   const filteredTopics = topics.filter((topic) => {
     console.log('Тема:', topic);
     console.log('userId:', userId);
-    return userId && topic.User.id === userId;
+    return userId && topic.authorId === userId;
   });
 
   return (

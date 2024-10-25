@@ -204,28 +204,12 @@ cardRouter.get('/progress/:user', async (req, res) => {
       group: ['Card.topicId', 'Topic.id'],
     });
 
-    const result = userTopics.map((topic) => {
-      const progress = userProgress.find((p) => p.Card.topicId === topic.id);
-      if (progress) {
-        return {
-          topicName: topic.topicName,
-          totalCards: progress.dataValues.totalCards,
-          cardsStudied: progress.dataValues.cardsStudied,
-          cardsOpened: progress.dataValues.cardsOpened,
-        };
-      }
-      return {
-        topicName: topic.topicName,
-        totalCards: 0,
-        cardsStudied: 0,
-        cardsOpened: 0,
-      };
-    });
-
-    res.json(result);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Произошла ошибка сервера' });
+    return res.json(userProgress);
+  } catch (err) {
+    console.error('Ошибка при обработке запроса к /progress:', err);
+    return res
+      .status(500)
+      .json({ message: 'Внутренняя ошибка сервера', error: err.message });
   }
 });
 
