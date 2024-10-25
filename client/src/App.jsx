@@ -61,7 +61,7 @@ function App() {
           element: <AccountPage user={user} />,
         },
         {
-          path: '/error',
+          path: '*',
           element: <ErrorPage />,
         },
         {

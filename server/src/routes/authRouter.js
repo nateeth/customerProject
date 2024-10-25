@@ -1,5 +1,5 @@
 const express = require('express');
-const bcrypt = require('bcrypt'); // хэширует пароль
+const bcrypt = require('bcrypt');
 const authRouter = express.Router();
 const { User } = require('../../db/models');
 const generateTokens = require('../utils/generateTokens');
