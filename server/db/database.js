@@ -2,9 +2,7 @@ require('dotenv').config();
 
 module.exports = {
   development: {
-    use_env_variable: process.env.DB_URL
-      ? 'DB_URL'
-      : 'postgresql://postgres.esgcsmhvcqvevmxeyfcu:FO2gD5v9YZ1JIy3Y@aws-0-eu-central-1.pooler.supabase.com:5432/postgres',
+    use_env_variable: 'DB_URL',  // указываем название переменной окружения
     dialect: 'postgres',
   },
   test: {
@@ -15,11 +13,10 @@ module.exports = {
     dialect: 'mysql',
   },
   production: {
-    use_env_variable: process.env.DB_URL_PROD
-      ? 'DB_URL_PROD'
-      : 'postgresql://postgres.esgcsmhvcqvevmxeyfcu:FO2gD5v9YZ1JIy3Y@aws-0-eu-central-1.pooler.supabase.com:5432/postgres',
+    use_env_variable: 'DB_URL_PROD', // указываем название переменной окружения
     dialectOptions: {
       ssl: {
+        require: true,
         rejectUnauthorized: false,
       },
     },
