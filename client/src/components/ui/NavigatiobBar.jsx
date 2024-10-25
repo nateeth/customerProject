@@ -17,6 +17,10 @@ export default function NavigationBar({ user, logoutHandler }) {
     navigate('/login');
   };
 
+  const handleNavigateToAccount = () => {
+    navigate('/account');
+  };
+
   return (
     <AppBar position="static">
       <Toolbar variant="dense">
@@ -39,13 +43,18 @@ export default function NavigationBar({ user, logoutHandler }) {
           Funny Cards
         </Typography>
         {user?.id ? (
-          <Typography
-            variant="subtitle1"
-            color="inherit"
-            sx={{ ml: 'auto', whiteSpace: 'nowrap' }}
-          >
-            Привет, {user.userName}
-          </Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Typography
+              variant="subtitle1"
+              color="inherit"
+              sx={{ ml: 'auto', whiteSpace: 'nowrap' }}
+            >
+              Привет, {user.userName}
+            </Typography>
+            <Button onClick={handleNavigateToAccount} variant="subtitle1" color="inherit">
+              Аккаунт
+            </Button>
+          </Box>
         ) : (
           <Box sx={{ display: 'flex', alignItems: 'center', ml: 'auto' }}>
             <Button color="inherit" onClick={handleNavigateToSignup}>
@@ -57,7 +66,7 @@ export default function NavigationBar({ user, logoutHandler }) {
           </Box>
         )}
         {user?.id && logoutHandler && (
-          <Button onClick={logoutHandler} color="inherit" sx={{ ml: 2 }}>
+          <Button onClick={logoutHandler} color="inherit" sx={{ ml: 0 }}>
             Выйти
           </Button>
         )}
