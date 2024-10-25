@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate({ User, UserGroup, Topic }) {
       this.belongsTo(User, { foreignKey: 'userId' });
       this.belongsToMany(User, { through: UserGroup, foreignKey: 'groupId' });
-      this.hasMany(Topic, { foreignKey: 'groupId' });
+      //this.hasMany(Topic, { foreignKey: 'groupId' });
     }
   }
   Group.init(
