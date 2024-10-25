@@ -122,7 +122,6 @@ const CardsPage = () => {
           <Typography variant="h4">{flipped ? word : translation}</Typography>
         </Box>
       </motion.div>
-
       <Box mt={2}>
         <Button
           variant="outlined"
@@ -152,4 +151,3 @@ const CardsPage = () => {
   );
 };
 
-export default CardsPage;

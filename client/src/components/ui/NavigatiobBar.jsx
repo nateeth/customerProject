@@ -1,6 +1,8 @@
 import { AppBar, IconButton, Toolbar, Typography, Button, Box } from '@mui/material';
 import FolderCopyIcon from '@mui/icons-material/FolderCopy';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import GroupIcon from '@mui/icons-material/Group';
+import DescriptionIcon from '@mui/icons-material/Description'; // Иконка для тем
 import { useNavigate } from 'react-router-dom';
 
 export default function NavigationBar({ user, logoutHandler }) {
@@ -20,6 +22,14 @@ export default function NavigationBar({ user, logoutHandler }) {
 
   const handleNavigateToAccount = () => {
     navigate(`/account/${user.id}`);
+  };
+
+  const handleNavigateToGroups = () => {
+    navigate('/groups');
+  };
+
+  const handleNavigateToUserTopics = () => {
+    navigate('/user/topics'); // Функция для навигации на страницу тем
   };
 
   return (
@@ -49,11 +59,28 @@ export default function NavigationBar({ user, logoutHandler }) {
               Привет, {user.userName}
             </Typography>
             <Button
-              variant="contained" 
+              color="inherit"
+              onClick={handleNavigateToGroups}
+              startIcon={<GroupIcon />}
+              sx={{ ml: 2, textTransform: 'none' }}
+            >
+              Группы
+            </Button>
+            {/* Кнопка для перехода на страницу тем */}
+            <Button
+              color="inherit"
+              onClick={handleNavigateToUserTopics}
+              startIcon={<DescriptionIcon />}
+              sx={{ ml: 2, textTransform: 'none' }}
+            >
+              Темы
+            </Button>
+            <Button
+              variant="contained"
               color="secondary"
               onClick={handleNavigateToAccount}
-              startIcon={<AccountCircleIcon />} 
-              sx={{ ml: 2, textTransform: 'none' }} 
+              startIcon={<AccountCircleIcon />}
+              sx={{ ml: 2, textTransform: 'none' }}
             >
               Аккаунт
             </Button>
