@@ -22,7 +22,7 @@ export default function ErrorPage() {
       <Typography variant="body1" gutterBottom>
         Мы не можем найти запрашиваемую страницу.
       </Typography>
-      <Button variant="contained" color="primary" href="/">
+      <Button variant="contained" color="primary" href="/topics">
         Вернуться на главную
       </Button>
     </Box>

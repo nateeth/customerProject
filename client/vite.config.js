@@ -9,4 +9,8 @@ export default defineConfig({
       '/api': 'htpp://localhost:3000',
     },
   },
+  build: {
+    outDir: '../server/dist',
+  },
+  base: '/',
 });

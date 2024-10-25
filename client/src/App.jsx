@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, useNavigate } from 'react-router-dom';
 import Layout from './components/Layout';
 import HomePage from './components/pages/HomePage';
 import SignupPage from './components/pages/SignupPage';
@@ -17,9 +17,12 @@ function App() {
   const [user, setUser] = useState(null);
 
   const logoutHandler = async () => {
+    // const navigate = useNavigate();
+
     await axiosInstance.get('/auth/logout');
     setUser(null);
     setAccessToken('');
+    // navigate('/');
   };
 
   useEffect(() => {
