@@ -126,7 +126,7 @@ const CreateCardsForm = ({ authorId }) => {
 
   return (
     <Container>
-      <Typography variant="h4" gutterBottom>
+      <Typography variant="h5" gutterBottom>
         Создать тему и карточки
       </Typography>
 

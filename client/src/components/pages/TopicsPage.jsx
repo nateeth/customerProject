@@ -36,6 +36,7 @@ const TopicPage = ({ user }) => {
 
   const userId = user?.id;
 
+
   const filteredTopics = topics.filter((topic) =>
     userId ? topic.authorId === userId : true,
   );
@@ -47,6 +48,7 @@ const TopicPage = ({ user }) => {
       </Container>
     );
   }
+
 
   return (
     <Container sx={{ pb: 4 }}>

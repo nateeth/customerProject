@@ -29,7 +29,7 @@ export default function NavigationBar({ user, logoutHandler }) {
   };
 
   const handleNavigateToUserTopics = () => {
-    navigate('/user/topics'); // Функция для навигации на страницу тем
+    navigate('/topics'); // Функция для навигации на страницу тем
   };
 
   return (
@@ -58,14 +58,14 @@ export default function NavigationBar({ user, logoutHandler }) {
             <Typography variant="subtitle1" color="inherit" sx={{ whiteSpace: 'nowrap' }}>
               Привет, {user.userName}
             </Typography>
-            <Button
+            {/* <Button
               color="inherit"
               onClick={handleNavigateToGroups}
               startIcon={<GroupIcon />}
               sx={{ ml: 2, textTransform: 'none' }}
             >
               Группы
-            </Button>
+            </Button> */}
             {/* Кнопка для перехода на страницу тем */}
             <Button
               color="inherit"
