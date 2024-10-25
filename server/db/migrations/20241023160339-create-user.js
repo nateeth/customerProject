@@ -23,10 +23,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      progressId: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-      },
+      // progressId: {
+      //   type: Sequelize.INTEGER,
+      //   allowNull: true,
+      // },
       isAdmin: {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
