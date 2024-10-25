@@ -54,7 +54,7 @@ function App() {
         },
         {
           path: '/cards/:topicId',
-          element: <CardsPage />,
+          element: <CardsPage userId={user?.id} />,
         },
         {
           path: '/account/:userId',
@@ -71,7 +71,7 @@ function App() {
         {
           path: '/user/topics',
           element: <UserTopicsPage user={user} />,
-        }
+        },
       ],
     },
   ]);

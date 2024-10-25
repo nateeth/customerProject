@@ -4,23 +4,27 @@ import { motion } from 'framer-motion';
 import axiosInstance from '../../axiosInstance';
 import { useParams, useLocation } from 'react-router-dom';
 
-const CardsPage = () => {
+const CardsPage = ({ userId }) => {
   const { topicId } = useParams();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const selectedLanguage = searchParams.get('language');
+  const selectedLanguage = searchParams.get('language') || '';
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
-  const [learnedCards, setLearnedCards] = useState(new Set());
+  const [learnedCards, setLearnedCards] = useState([]);
   const [cardData, setCardData] = useState([]);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchCards = async () => {
+      setLoading(true);
       try {
-        const response = await axiosInstance.get(`/api/cards?topicId=${topicId}&language=${selectedLanguage}`);
+        const response = await axiosInstance.get(`/api/topics/${topicId}/${userId}`, {
+          params: { language: selectedLanguage },
+        });
+        console.log('Полученные карточки:', response.data);
         setCardData(response.data);
       } catch (error) {
         console.error('Ошибка загрузки карточек:', error);
@@ -29,8 +33,9 @@ const CardsPage = () => {
         setLoading(false);
       }
     };
+
     fetchCards();
-  }, [topicId, selectedLanguage]);
+  }, [topicId, selectedLanguage, userId]);
 
   const handleNext = () => {
     setFlipped(false);
@@ -48,15 +53,12 @@ const CardsPage = () => {
     setFlipped((prev) => !prev);
   };
 
-  const handleLearned = () => {
-    setLearnedCards((prev) => new Set(prev).add(cardData[currentIndex].id));
-    handleNext();
-  };
-
   if (error) {
     return (
       <Box display="flex" flexDirection="column" alignItems="center" mt={4}>
-        <Typography variant="h6" color="error">{error}</Typography>
+        <Typography variant="h6" color="error">
+          {error}
+        </Typography>
       </Box>
     );
   }
@@ -78,8 +80,7 @@ const CardsPage = () => {
     );
   }
 
-  const { word, translation } = cardData[currentIndex];
-  const isLearned = learnedCards.has(cardData[currentIndex].id);
+  const { value, translation } = cardData[currentIndex];
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center" mt={4}>
@@ -95,8 +96,9 @@ const CardsPage = () => {
           alignItems: 'center',
           justifyContent: 'center',
           cursor: 'pointer',
-          perspective: '1000px',
+          perspective: '1000px', 
           position: 'relative',
+          transformStyle: 'preserve-3d',  
         }}
         initial={{ rotateY: 0 }}
         animate={{ rotateY: flipped ? 180 : 0 }}
@@ -105,7 +107,7 @@ const CardsPage = () => {
         <Box
           style={{
             position: 'absolute',
-            backfaceVisibility: 'hidden',
+            backfaceVisibility: 'hidden', 
             width: '100%',
             height: '100%',
             display: 'flex',
@@ -116,24 +118,25 @@ const CardsPage = () => {
             fontWeight: 'bold',
           }}
         >
-          <Typography variant="h4">{flipped ? translation : word}</Typography>
+          <Typography variant="h4">{value}</Typography>
         </Box>
+
         <Box
           style={{
             position: 'absolute',
-            backfaceVisibility: 'hidden',
-            transform: 'rotateY(180deg)',
+            backfaceVisibility: 'hidden', 
+            transform: 'rotateY(180deg)', 
             width: '100%',
             height: '100%',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: '#E0FFFF',
           }}
         >
-          <Typography variant="h4">{flipped ? word : translation}</Typography>
+          <Typography variant="h4">{translation}</Typography>
         </Box>
       </motion.div>
+
       <Box mt={2}>
         <Button
           variant="outlined"
@@ -149,14 +152,6 @@ const CardsPage = () => {
           disabled={currentIndex === cardData.length - 1}
         >
           Вперед
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleLearned}
-          sx={{ ml: 1 }}
-        >
-          Изучено
         </Button>
       </Box>
     </Box>
